@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lobo Barber Shop — Agenda tu Cita</title>
+  <meta name="description" content="Reserva tu cita en Lobo Barber Shop. Barbería premium en Costa Rica." />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐺</text></svg>" />
+</head>
+<body>
+
+<!-- ═══ PANTALLA DE INTRO ══════════════════════════════════════ -->
+<div id="intro-screen" aria-hidden="true">
+  <div class="intro-content">
+    <div class="intro-wolf-wrap">
+      <svg class="intro-wolf-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- Oreja izquierda -->
+        <path d="M28,52 L16,14 L46,44 Z" fill="#DC2626"/>
+        <!-- Oreja derecha -->
+        <path d="M92,52 L104,14 L74,44 Z" fill="#DC2626"/>
+        <!-- Cabeza -->
+        <ellipse cx="60" cy="68" rx="38" ry="36" fill="#DC2626"/>
+        <!-- Hocico -->
+        <ellipse cx="60" cy="83" rx="20" ry="14" fill="#1a1a1a"/>
+        <!-- Ojo izquierdo -->
+        <ellipse cx="44" cy="63" rx="7" ry="6" fill="#1a1a1a"/>
+        <circle cx="46" cy="61" r="2.5" fill="#EF4444" opacity=".9"/>
+        <!-- Ojo derecho -->
+        <ellipse cx="76" cy="63" rx="7" ry="6" fill="#1a1a1a"/>
+        <circle cx="78" cy="61" r="2.5" fill="#EF4444" opacity=".9"/>
+        <!-- Nariz -->
+        <ellipse cx="60" cy="75" rx="6" ry="4" fill="#080808"/>
+      </svg>
+    </div>
+    <div class="intro-title">
+      <span class="intro-letter" style="--i:0">L</span>
+      <span class="intro-letter" style="--i:1">O</span>
+      <span class="intro-letter" style="--i:2">B</span>
+      <span class="intro-letter" style="--i:3">O</span>
+    </div>
+    <div class="intro-line"></div>
+    <div class="intro-subtitle">BARBER SHOP</div>
+  </div>
+</div>
+
+<!-- ═══ NAVBAR ═══════════════════════════════════════════════════ -->
+<nav class="navbar">
+  <a href="#inicio" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+        <path d="M14,26 L8,7 L23,22 Z" fill="#0A0A0A"/>
+        <path d="M46,26 L52,7 L37,22 Z" fill="#0A0A0A"/>
+        <ellipse cx="30" cy="34" rx="19" ry="18" fill="#0A0A0A"/>
+        <ellipse cx="30" cy="42" rx="10" ry="7" fill="#DC2626"/>
+        <ellipse cx="22" cy="31" rx="3.5" ry="3" fill="#DC2626"/>
+        <ellipse cx="38" cy="31" rx="3.5" ry="3" fill="#DC2626"/>
+      </svg>
+    </div>
+    <span class="nav-logo-text">LOBO<span>BARBER</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="#servicios" class="nav-btn nav-btn-ghost">Servicios</a>
+    <a href="#barberos" class="nav-btn nav-btn-ghost">Barberos</a>
+    <a href="#trabajos" class="nav-btn nav-btn-ghost">Trabajos</a>
+    <a href="#gestionar" class="nav-btn nav-btn-ghost">Mi Cita</a>
+    <a href="#agendar" class="nav-btn nav-btn-red">Agendar →</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════════ -->
+<section class="hero" id="inicio">
+  <div class="hero-bg-text" aria-hidden="true">LOBO</div>
+  <span class="hero-badge">✦ Barbería Premium ✦</span>
+  <div class="hero-logo">
+    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" width="70" height="70">
+      <path d="M28,52 L16,14 L46,44 Z" fill="#DC2626"/>
+      <path d="M92,52 L104,14 L74,44 Z" fill="#DC2626"/>
+      <ellipse cx="60" cy="68" rx="38" ry="36" fill="#DC2626"/>
+      <ellipse cx="60" cy="83" rx="20" ry="14" fill="#0A0A0A"/>
+      <ellipse cx="44" cy="63" rx="7" ry="6" fill="#0A0A0A"/>
+      <circle cx="46" cy="61" r="2.5" fill="#FF6B6B"/>
+      <ellipse cx="76" cy="63" rx="7" ry="6" fill="#0A0A0A"/>
+      <circle cx="78" cy="61" r="2.5" fill="#FF6B6B"/>
+      <ellipse cx="60" cy="75" rx="6" ry="4" fill="#050505"/>
+    </svg>
+  </div>
+  <h1>LOBO<br><span>BARBER</span><br>SHOP</h1>
+  <p class="hero-sub">Donde el estilo se convierte en arte</p>
+  <div class="hero-cta">
+    <a href="#agendar" class="btn btn-primary">Reservar Cita</a>
+    <a href="#gestionar" class="btn btn-outline">Gestionar Cita</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Barberos Expertos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">9–6:30</div>
+      <div class="stat-label">Horario</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5★</div>
+      <div class="stat-label">Calidad</div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    <span>Explorar</span>
+  </div>
+</section>
+
+<!-- ═══ SERVICIOS ═════════════════════════════════════════════════ -->
+<section id="servicios">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Lo que ofrecemos</span>
+      <h2 class="section-title">Nuestros <span>Servicios</span></h2>
+      <div class="red-line"></div>
+      <p class="section-desc" style="margin-top:.75rem">Cada servicio es una experiencia. Trabajo artesanal con los mejores productos.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <span class="service-icon">💈</span>
+        <div class="service-name">Corte de Cabello</div>
+        <div class="service-duration">⏱ 30 min</div>
+        <div class="service-price">₡8.000</div>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🪒</span>
+        <div class="service-name">Arreglo de Barba</div>
+        <div class="service-duration">⏱ 30 min</div>
+        <div class="service-price">₡5.000</div>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">⭐</span>
+        <div class="service-name">Corte + Barba</div>
+        <div class="service-duration">⏱ 60 min</div>
+        <div class="service-price">₡12.000</div>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">✨</span>
+        <div class="service-name">Afeitado a Navaja</div>
+        <div class="service-duration">⏱ 45 min</div>
+        <div class="service-price">₡6.000</div>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🧒</span>
+        <div class="service-name">Corte Niño</div>
+        <div class="service-duration">⏱ 30 min</div>
+        <div class="service-price">₡5.000</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BARBEROS ══════════════════════════════════════════════════ -->
+<section id="barberos">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">El equipo</span>
+      <h2 class="section-title">Nuestros <span>Barberos</span></h2>
+      <div class="red-line"></div>
+    </div>
+    <div class="barbers-grid">
+      <div class="barber-card">
+        <div class="barber-num">01</div>
+        <div class="barber-avatar">🐺</div>
+        <div class="barber-name">Lobo</div>
+        <div class="barber-title">Maestro Barbero</div>
+        <div class="barber-schedule">
+          <strong>📅 Lunes a Sábado</strong>
+          🕘 9:00 AM — 6:30 PM
+        </div>
+      </div>
+      <div class="barber-card">
+        <div class="barber-num">02</div>
+        <div class="barber-avatar">✂️</div>
+        <div class="barber-name">Cachetes</div>
+        <div class="barber-title">Maestro Barbero</div>
+        <div class="barber-schedule">
+          <strong>📅 Lunes a Sábado</strong>
+          🕘 9:00 AM — 6:30 PM
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRABAJOS REALIZADOS ═══════════════════════════════════════ -->
+<section id="trabajos">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Nuestro trabajo</span>
+      <h2 class="section-title">Trabajos <span>Realizados</span></h2>
+      <div class="red-line"></div>
+      <p class="section-desc" style="margin-top:.75rem">Cada corte cuenta una historia. Mira lo que hacemos.</p>
+    </div>
+    <div class="works-grid">
+      <div class="work-card">
+        <div class="work-img work-img-1">
+          <div class="work-overlay">
+            <span class="work-tag">Fade</span>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-title">Fade Clásico</div>
+          <div class="work-barber">por <strong>Lobo</strong></div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-img work-img-2">
+          <div class="work-overlay">
+            <span class="work-tag">Corte + Barba</span>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-title">Combo Completo</div>
+          <div class="work-barber">por <strong>Cachetes</strong></div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-img work-img-3">
+          <div class="work-overlay">
+            <span class="work-tag">Skin Fade</span>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-title">Skin Fade Degradado</div>
+          <div class="work-barber">por <strong>Lobo</strong></div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-img work-img-4">
+          <div class="work-overlay">
+            <span class="work-tag">Barba</span>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-title">Barba Estilizada</div>
+          <div class="work-barber">por <strong>Cachetes</strong></div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-img work-img-5">
+          <div class="work-overlay">
+            <span class="work-tag">Texturizado</span>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-title">Corte Texturizado</div>
+          <div class="work-barber">por <strong>Lobo</strong></div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-img work-img-6">
+          <div class="work-overlay">
+            <span class="work-tag">Navaja</span>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-title">Afeitado a Navaja</div>
+          <div class="work-barber">por <strong>Cachetes</strong></div>
+        </div>
+      </div>
+    </div>
+    <p class="works-note">📸 ¡Síguenos en redes para ver más trabajos!</p>
+  </div>
+</section>
+
+<!-- ═══ AGENDAR ═══════════════════════════════════════════════════ -->
+<section id="agendar">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Reservación</span>
+      <h2 class="section-title">Agenda tu <span>Cita</span></h2>
+      <div class="red-line"></div>
+    </div>
+
+    <div class="booking-wrapper">
+      <div class="booking-header">
+        <h2>NUEVA CITA</h2>
+        <p>Reserva en segundos, llega con estilo</p>
+      </div>
+      <div class="booking-body">
+
+        <!-- Steps -->
+        <div class="steps">
+          <div class="step-item active" id="step-ind-1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Servicio</div>
+          </div>
+          <div class="step-item" id="step-ind-2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Fecha</div>
+          </div>
+          <div class="step-item" id="step-ind-3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Datos</div>
+          </div>
+          <div class="step-item" id="step-ind-4">
+            <div class="step-circle">4</div>
+            <div class="step-label">Confirmar</div>
+          </div>
+        </div>
+
+        <!-- ── PASO 1: Servicio & Barbero ── -->
+        <div class="form-panel active" id="panel-1">
+          <div class="form-group">
+            <label class="form-label">Elige tu Servicio <span class="req">*</span></label>
+            <div class="svc-pick-grid">
+              <div class="svc-pick" data-service="corte" onclick="selectService('corte')">
+                <span class="svc-pick-ico">💈</span>
+                <div class="svc-pick-info">
+                  <div class="svc-pick-name">Corte de Cabello</div>
+                  <div class="svc-pick-meta">⏱ 30 min</div>
+                </div>
+                <div class="svc-pick-price">₡8.000</div>
+              </div>
+              <div class="svc-pick" data-service="barba" onclick="selectService('barba')">
+                <span class="svc-pick-ico">🪒</span>
+                <div class="svc-pick-info">
+                  <div class="svc-pick-name">Arreglo de Barba</div>
+                  <div class="svc-pick-meta">⏱ 30 min</div>
+                </div>
+                <div class="svc-pick-price">₡5.000</div>
+              </div>
+              <div class="svc-pick" data-service="combo" onclick="selectService('combo')">
+                <span class="svc-pick-ico">⭐</span>
+                <div class="svc-pick-info">
+                  <div class="svc-pick-name">Corte + Barba</div>
+                  <div class="svc-pick-meta">⏱ 60 min</div>
+                </div>
+                <div class="svc-pick-price">₡12.000</div>
+              </div>
+              <div class="svc-pick" data-service="navaja" onclick="selectService('navaja')">
+                <span class="svc-pick-ico">✨</span>
+                <div class="svc-pick-info">
+                  <div class="svc-pick-name">Afeitado a Navaja</div>
+                  <div class="svc-pick-meta">⏱ 45 min</div>
+                </div>
+                <div class="svc-pick-price">₡6.000</div>
+              </div>
+              <div class="svc-pick" data-service="nino" onclick="selectService('nino')">
+                <span class="svc-pick-ico">🧒</span>
+                <div class="svc-pick-info">
+                  <div class="svc-pick-name">Corte Niño</div>
+                  <div class="svc-pick-meta">⏱ 30 min</div>
+                </div>
+                <div class="svc-pick-price">₡5.000</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Elige tu Barbero <span class="req">*</span></label>
+            <div class="barber-select-grid">
+              <div class="barber-option" data-barber="1" onclick="selectBarber(1)">
+                <div class="barber-option-avatar">🐺</div>
+                <div class="barber-option-name">Lobo</div>
+                <div class="barber-option-days">Lun — Sáb</div>
+              </div>
+              <div class="barber-option" data-barber="2" onclick="selectBarber(2)">
+                <div class="barber-option-avatar">✂️</div>
+                <div class="barber-option-name">Cachetes</div>
+                <div class="barber-option-days">Lun — Sáb</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-nav">
+            <button class="btn btn-primary" onclick="goStep(2)" style="margin-left:auto">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- ── PASO 2: Fecha & Hora ── -->
+        <div class="form-panel" id="panel-2">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="inp-date">Fecha <span class="req">*</span></label>
+              <input type="date" class="form-control" id="inp-date" onchange="loadSlots()" />
+            </div>
+            <div class="form-group" style="display:flex;flex-direction:column">
+              <label class="form-label">Horario disponible <span class="req">*</span></label>
+              <div id="slots-loading" style="display:none;text-align:center;padding:.75rem">
+                <span class="spinner spinner-red"></span>
+              </div>
+              <div id="slots-container"></div>
+            </div>
+          </div>
+          <div class="form-nav">
+            <button class="btn btn-outline" onclick="goStep(1)">← Atrás</button>
+            <button class="btn btn-primary" onclick="goStep(3)">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- ── PASO 3: Datos personales ── -->
+        <div class="form-panel" id="panel-3">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="inp-name">Nombre completo <span class="req">*</span></label>
+              <input type="text" class="form-control" id="inp-name" placeholder="Tu nombre" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inp-phone">Teléfono <span class="req">*</span></label>
+              <div style="display:flex;gap:6px">
+                <span style="display:flex;align-items:center;background:#1C1C1C;border:1px solid #2A2A2A;border-radius:8px;padding:0 12px;font-size:.9rem;color:#888;white-space:nowrap;flex-shrink:0">🇨🇷 +506</span>
+                <input type="tel" class="form-control" id="inp-phone" placeholder="8888 8888" style="flex:1" maxlength="8" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inp-email">Email (opcional)</label>
+            <input type="email" class="form-control" id="inp-email" placeholder="tucorreo@email.com" />
+          </div>
+          <div class="form-nav">
+            <button class="btn btn-outline" onclick="goStep(2)">← Atrás</button>
+            <button class="btn btn-primary" onclick="goStep(4)">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- ── PASO 4: Confirmar ── -->
+        <div class="form-panel" id="panel-4">
+          <div class="booking-summary" id="summary-box"></div>
+          <div class="form-nav">
+            <button class="btn btn-outline" onclick="goStep(3)">← Atrás</button>
+            <button class="btn btn-primary" id="btn-confirm" onclick="confirmBooking()">
+              Confirmar Cita ✓
+            </button>
+          </div>
+        </div>
+
+        <!-- ── PASO 5: Confirmación exitosa ── -->
+        <div class="form-panel" id="panel-5">
+          <div class="confirmation">
+            <div class="confirmation-icon">✅</div>
+            <h3>¡Cita Confirmada!</h3>
+            <p>Tu cita ha sido agendada exitosamente.<br>Guarda tu código para gestionar tu cita.</p>
+            <div class="code-display">
+              <div class="code-label">Tu código único</div>
+              <div class="code-value" id="conf-code">—</div>
+              <div class="code-warning">⚠️ Necesitas este código para modificar o cancelar tu cita</div>
+            </div>
+            <div id="conf-details" style="text-align:left;margin-bottom:1.5rem"></div>
+            <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+              <button class="btn btn-outline" onclick="copyCode()">📋 Copiar Código</button>
+              <button class="btn btn-primary" onclick="resetForm()">Nueva Cita</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /booking-body -->
+    </div><!-- /booking-wrapper -->
+  </div>
+</section>
+
+<!-- ═══ GESTIONAR ═════════════════════════════════════════════════ -->
+<section id="gestionar">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Tu reservación</span>
+      <h2 class="section-title">Gestionar <span>Cita</span></h2>
+      <div class="red-line"></div>
+      <p class="section-desc" style="margin-top:.75rem">Ingresa tu código único para modificar o cancelar tu cita.</p>
+    </div>
+
+    <div class="manage-wrapper">
+      <div class="manage-card">
+        <h3><span>🔑</span> Buscar mi cita</h3>
+        <div class="form-row">
+          <div class="form-group" style="margin:0;flex:1">
+            <input type="text" class="form-control" id="inp-manage-code"
+              placeholder="Ingresa tu código (ej: AB3X9M7K)"
+              style="text-transform:uppercase;letter-spacing:2px"
+              maxlength="8" />
+          </div>
+          <button class="btn btn-primary" onclick="searchAppointment()" style="height:46px;align-self:end;white-space:nowrap;margin-left:.75rem">
+            Buscar
+          </button>
+        </div>
+
+        <div class="appt-details" id="appt-details">
+          <div class="appt-info" id="appt-info"></div>
+          <div class="manage-actions" id="manage-actions"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-wolf">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="40" height="40" opacity=".3">
+      <path d="M18,34 L10,9 L30,29 Z" fill="#DC2626"/>
+      <path d="M62,34 L70,9 L50,29 Z" fill="#DC2626"/>
+      <ellipse cx="40" cy="45" rx="26" ry="24" fill="#DC2626"/>
+      <ellipse cx="40" cy="55" rx="13" ry="9" fill="#0A0A0A"/>
+      <ellipse cx="29" cy="42" rx="5" ry="4" fill="#0A0A0A"/>
+      <ellipse cx="51" cy="42" rx="5" ry="4" fill="#0A0A0A"/>
+    </svg>
+  </div>
+  <div class="footer-logo">LOBO<span>BARBER</span> SHOP</div>
+  <div class="footer-tagline">Donde el estilo se convierte en arte</div>
+  <div class="footer-links">
+    <a href="#inicio">Inicio</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#barberos">Barberos</a>
+    <a href="#trabajos">Trabajos</a>
+    <a href="#agendar">Agendar</a>
+    <a href="#gestionar">Mi Cita</a>
+  </div>
+  <div class="footer-copy">© 2024 Lobo Barber Shop. Todos los derechos reservados.</div>
+</footer>
+
+<!-- ═══ MODAL: Modificar Cita ════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-edit">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">✏️ Modificar Cita</h3>
+      <button class="modal-close" onclick="closeModal('modal-edit')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Servicio</label>
+      <select class="form-control" id="edit-service">
+        <option value="corte">Corte de Cabello — ₡8.000</option>
+        <option value="barba">Arreglo de Barba — ₡5.000</option>
+        <option value="combo">Corte + Barba — ₡12.000</option>
+        <option value="navaja">Afeitado a Navaja — ₡6.000</option>
+        <option value="nino">Corte Niño — ₡5.000</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Barbero</label>
+      <select class="form-control" id="edit-barber" onchange="loadEditSlots()">
+        <option value="1">Lobo (Lun–Sáb)</option>
+        <option value="2">Cachetes (Lun–Sáb)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nueva Fecha</label>
+      <input type="date" class="form-control" id="edit-date" onchange="loadEditSlots()" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nuevo Horario</label>
+      <div id="edit-slots-container"></div>
+    </div>
+    <div style="display:flex;gap:.75rem;margin-top:1rem">
+      <button class="btn btn-outline" onclick="closeModal('modal-edit')" style="flex:1;justify-content:center">Cancelar</button>
+      <button class="btn btn-primary" onclick="submitEdit()" style="flex:1;justify-content:center" id="btn-save-edit">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ══════════════════════════════════════════════════════ -->
+<div class="toast-container" id="toast-container"></div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx claude-code-templates@latest --skill development/senior-frontend)",
+      "Bash(npx claude-code-templates@latest --skill development/senior-backend)",
+      "Bash(npx claude-code-templates@latest --skill creative-design/ui-ux-pro-max)",
+      "Bash(npx claude-code-templates@latest --skill development/senior-fullstack)",
+      "Bash(npx claude-code-templates@latest --skill creative-design/canvas-design)",
+      "Bash(npx claude-code-templates@latest --agent development-team/frontend-developer)",
+      "Bash(npx claude-code-templates@latest --agent development-team/backend-architect)",
+      "Bash(npx claude-code-templates@latest --agent development-team/fullstack-developer)",
+      "WebFetch(domain:www.instagram.com)",
+      "Bash(npm install:*)",
+      "Bash(node --check server.js)"
+    ]
+  }
+}

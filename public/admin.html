@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lobo Barber Shop — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --gold:#C9A84C;--gold-l:#E4C876;--gold-d:#9A7A2E;
+  --black:#0A0A0A;--dark:#111111;--card:#161616;--card2:#1C1C1C;
+  --border:#2A2A2A;--border2:#333333;
+  --text:#F5F5F0;--muted:#888888;--dim:#555555;
+  --ok:#4CAF50;--err:#E53935;--warn:#FF9800;--info:#2196F3;
+}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);min-height:100vh;line-height:1.6}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--dark)}::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:3px}
+
+/* ── LOGIN ─────────────────────────────────── */
+#login-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:1.5rem;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,168,76,.1) 0%,transparent 60%),var(--black);
+}
+.login-card{
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:2.5rem 2rem;width:100%;max-width:380px;
+  box-shadow:0 24px 80px rgba(0,0,0,.6);text-align:center;
+}
+.login-logo{width:72px;height:72px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.25rem;box-shadow:0 0 32px rgba(201,168,76,.3)}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;margin-bottom:.2rem}
+.login-title span{color:var(--gold)}
+.login-sub{color:var(--muted);font-size:.82rem;margin-bottom:1.75rem}
+.login-err{background:rgba(229,57,53,.1);border:1px solid rgba(229,57,53,.3);color:var(--err);border-radius:8px;padding:.7rem 1rem;font-size:.82rem;margin-bottom:1rem;display:none}
+.login-err.vis{display:block}
+.fc{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:11px 15px;color:var(--text);font-size:.93rem;font-family:'Inter',sans-serif;transition:border-color .2s;outline:none;margin-bottom:1rem}
+.fc:focus{border-color:var(--gold)}
+.fc::placeholder{color:var(--dim)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 24px;border-radius:8px;font-size:.93rem;font-weight:600;cursor:pointer;transition:all .22s;border:none;font-family:'Inter',sans-serif;width:100%}
+.btn-g{background:var(--gold);color:var(--black)}
+.btn-g:hover{background:var(--gold-l)}
+.btn-o{background:transparent;color:var(--text);border:1px solid var(--border2);width:auto}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+.btn-d{background:transparent;color:var(--err);border:1px solid rgba(229,57,53,.35);width:auto;padding:7px 14px;font-size:.82rem}
+.btn-d:hover{background:rgba(229,57,53,.08);border-color:var(--err)}
+.btn-sm{padding:6px 14px;font-size:.78rem;width:auto}
+
+/* ── APP ───────────────────────────────────── */
+#app{display:none}
+
+/* ── SIDEBAR ───────────────────────────────── */
+.layout{display:flex;min-height:100vh}
+.sidebar{
+  width:220px;flex-shrink:0;background:var(--dark);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;
+}
+.sb-logo{padding:1.5rem 1.25rem;border-bottom:1px solid var(--border)}
+.sb-logo-txt{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px}
+.sb-logo-txt span{color:var(--gold)}
+.sb-logo-sub{font-size:.68rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:.15rem}
+.sb-nav{padding:1rem 0;flex:1}
+.sb-item{
+  display:flex;align-items:center;gap:.75rem;padding:.7rem 1.25rem;
+  font-size:.84rem;font-weight:500;color:var(--muted);cursor:pointer;
+  transition:all .2s;border-left:2px solid transparent;
+}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.sb-item.act{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,.06)}
+.sb-item .ico{font-size:1rem;width:18px;text-align:center}
+.sb-footer{padding:1rem 1.25rem;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem}
+.sb-ava{width:30px;height:30px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.sb-uname{font-size:.8rem;font-weight:500}
+.sb-urole{font-size:.68rem;color:var(--muted)}
+
+/* ── MAIN ──────────────────────────────────── */
+.main{flex:1;margin-left:220px;display:flex;flex-direction:column;min-height:100vh}
+.topbar{
+  height:60px;background:var(--dark);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;padding:0 2rem;
+  position:sticky;top:0;z-index:40;
+}
+.topbar-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:.75rem}
+.now-badge{font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:.4rem}
+.content{padding:2rem;flex:1}
+
+/* ── VIEWS ─────────────────────────────────── */
+.view{display:none}.view.act{display:block;animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── STATS ─────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:1.25rem 1.4rem;position:relative;overflow:hidden;
+}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.blue::after{background:linear-gradient(to right,transparent,var(--info),transparent)}
+.stat-card.green::after{background:linear-gradient(to right,transparent,var(--ok),transparent)}
+.stat-card.gold::after{background:linear-gradient(to right,transparent,var(--gold),transparent)}
+.stat-card.red::after{background:linear-gradient(to right,transparent,var(--err),transparent)}
+.stat-ico{font-size:1.4rem;margin-bottom:.6rem}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1;margin-bottom:.2rem}
+.stat-card.blue .stat-val{color:var(--info)}
+.stat-card.green .stat-val{color:var(--ok)}
+.stat-card.gold .stat-val{color:var(--gold)}
+.stat-card.red .stat-val{color:var(--err)}
+.stat-lbl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+/* ── FILTERS ───────────────────────────────── */
+.filters{
+  display:flex;gap:.75rem;align-items:flex-end;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:1.25rem 1.4rem;margin-bottom:1.5rem;
+}
+.fg{display:flex;flex-direction:column;gap:.35rem}
+.fl{font-size:.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.fc-sm{background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:8px 12px;color:var(--text);font-size:.85rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;cursor:pointer;appearance:none}
+.fc-sm:focus{border-color:var(--gold)}
+select.fc-sm{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.filter-actions{display:flex;gap:.5rem;align-self:flex-end}
+
+/* ── TABLE ─────────────────────────────────── */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.table-head{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.4rem;border-bottom:1px solid var(--border)}
+.table-title{font-weight:600;font-size:.95rem;display:flex;align-items:center;gap:.5rem}
+.count-badge{background:var(--gold);color:var(--black);border-radius:100px;padding:2px 9px;font-size:.72rem;font-weight:700}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{padding:.75rem 1rem;text-align:left;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);white-space:nowrap}
+.tbl td{padding:.8rem 1rem;font-size:.85rem;border-bottom:1px solid rgba(42,42,42,.5);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600}
+.badge.ok{background:rgba(76,175,80,.12);color:var(--ok);border:1px solid rgba(76,175,80,.25)}
+.badge.err{background:rgba(229,57,53,.12);color:var(--err);border:1px solid rgba(229,57,53,.25)}
+.badge.warn{background:rgba(255,152,0,.12);color:var(--warn);border:1px solid rgba(255,152,0,.25)}
+.code-cell{font-family:monospace;letter-spacing:1.5px;color:var(--gold);font-size:.82rem}
+.tbl-empty{text-align:center;padding:3rem;color:var(--muted);font-size:.9rem}
+.tbl-empty .ico{font-size:2rem;margin-bottom:.5rem;display:block}
+.action-btns{display:flex;gap:.4rem}
+.btn-icon{width:28px;height:28px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.btn-icon:hover{border-color:var(--gold);color:var(--gold)}
+.btn-icon.del:hover{border-color:var(--err);color:var(--err)}
+
+/* ── PAGINATION ────────────────────────────── */
+.pag{display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.4rem;border-top:1px solid var(--border)}
+.pag-info{font-size:.78rem;color:var(--muted)}
+.pag-btns{display:flex;gap:.4rem}
+.pag-btn{width:30px;height:30px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-size:.8rem;transition:all .18s;display:flex;align-items:center;justify-content:center}
+.pag-btn:hover{border-color:var(--gold);color:var(--gold)}
+.pag-btn.act{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.pag-btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* ── DETAIL MODAL ──────────────────────────── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(7px);z-index:200;align-items:center;justify-content:center;padding:1.5rem}
+.overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;animation:fi .2s ease}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem}
+.mt{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600}
+.mc{width:30px;height:30px;background:var(--card2);border:none;border-radius:6px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:all .18s}
+.mc:hover{background:var(--border);color:var(--text)}
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem}
+.det-item{background:var(--card2);border-radius:8px;padding:.9rem 1rem}
+.det-item.full{grid-column:1/-1}
+.det-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.25rem}
+.det-val{font-size:.9rem;font-weight:500}
+.det-val.gold{color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px}
+.modal-acts{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:.5rem}
+.modal-acts .btn{flex:1;min-width:120px}
+
+/* ── CALENDAR VIEW ─────────────────────────── */
+.cal-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.cal-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.4rem}
+.cal-date-hd{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:1rem;color:var(--gold)}
+.cal-appt-item{
+  display:flex;align-items:center;gap:.75rem;padding:.65rem .85rem;
+  background:var(--card2);border-radius:8px;margin-bottom:.5rem;cursor:pointer;
+  border:1px solid var(--border);transition:border-color .18s;
+}
+.cal-appt-item:hover{border-color:var(--gold)}
+.cal-time{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--gold);width:42px;flex-shrink:0;letter-spacing:1px}
+.cal-info{flex:1;min-width:0}
+.cal-name{font-weight:500;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-svc{font-size:.75rem;color:var(--muted)}
+.cal-barber{font-size:.68rem;background:rgba(201,168,76,.12);color:var(--gold);padding:2px 7px;border-radius:100px;flex-shrink:0}
+.cal-empty{text-align:center;padding:2rem;color:var(--dim);font-size:.85rem}
+.day-nav{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+.day-nav-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;flex:1;text-align:center}
+
+/* ── SPINNER ───────────────────────────────── */
+.spin{width:16px;height:16px;border:2px solid rgba(201,168,76,.2);border-top-color:var(--gold);border-radius:50%;animation:sp .55s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading-row td{text-align:center;padding:2.5rem}
+
+/* ── TOAST ─────────────────────────────────── */
+#toasts{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;display:flex;flex-direction:column;gap:.6rem}
+.toast{display:flex;align-items:flex-start;gap:.65rem;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:.8rem 1.1rem;min-width:240px;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:tin .25s ease}
+@keyframes tin{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+.toast.out{animation:tout .25s ease forwards}
+@keyframes tout{to{transform:translateX(120%);opacity:0}}
+.toast.ok{border-left:3px solid var(--ok)}.toast.err{border-left:3px solid var(--err)}.toast.info{border-left:3px solid var(--gold)}
+.ti{font-size:1rem;flex-shrink:0;margin-top:1px}.tt{font-weight:600;font-size:.86rem;margin-bottom:1px}.tm{font-size:.78rem;color:var(--muted)}
+
+/* ── RESPONSIVE ────────────────────────────── */
+@media(max-width:900px){
+  .sidebar{width:60px}.sidebar .sb-logo-txt,.sidebar .sb-logo-sub,.sidebar .sb-item span,.sidebar .sb-uname,.sidebar .sb-urole{display:none}
+  .sidebar .sb-item{padding:.8rem;justify-content:center}.sidebar .sb-footer{padding:.75rem;display:flex;justify-content:center}
+  .main{margin-left:60px}
+  .cal-layout{grid-template-columns:1fr}
+  .det-grid{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .content{padding:1rem}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .tbl th:nth-child(4),.tbl td:nth-child(4),.tbl th:nth-child(5),.tbl td:nth-child(5){display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">✂️</div>
+    <div class="login-title">LOBO<span>BARBER</span></div>
+    <div class="login-sub">Panel de Administración</div>
+    <div class="login-err" id="login-err">Contraseña incorrecta</div>
+    <input type="password" class="fc" id="pass-inp" placeholder="Contraseña de administrador"
+      onkeydown="if(event.key==='Enter') doLogin()"/>
+    <button class="btn btn-g" onclick="doLogin()">Ingresar al Panel</button>
+  </div>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════ -->
+<div id="app">
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sb-logo">
+        <div class="sb-logo-txt">LOBO<span>BARBER</span></div>
+        <div class="sb-logo-sub">Admin Panel</div>
+      </div>
+      <nav class="sb-nav">
+        <div class="sb-item act" onclick="showView('dashboard')">
+          <span class="ico">📊</span><span>Dashboard</span>
+        </div>
+        <div class="sb-item" onclick="showView('citas')">
+          <span class="ico">📋</span><span>Todas las Citas</span>
+        </div>
+        <div class="sb-item" onclick="showView('calendario')">
+          <span class="ico">📅</span><span>Vista por Día</span>
+        </div>
+      </nav>
+      <div class="sb-footer">
+        <div class="sb-user">
+          <div class="sb-ava">👤</div>
+          <div><div class="sb-uname">Administrador</div><div class="sb-urole">Lobo Barber Shop</div></div>
+        </div>
+        <button class="btn btn-o" style="width:100%;font-size:.78rem;padding:7px" onclick="logout()">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-title" id="view-title">Dashboard</div>
+        <div class="topbar-right">
+          <div class="now-badge">🕐 <span id="clock">--:--</span></div>
+          <a href="/" target="_blank" class="btn btn-o">← Ir al sitio</a>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- ── DASHBOARD ── -->
+        <div class="view act" id="view-dashboard">
+          <div class="stats-grid">
+            <div class="stat-card blue"><div class="stat-ico">📅</div><div class="stat-val" id="s-today">—</div><div class="stat-lbl">Citas Hoy</div></div>
+            <div class="stat-card green"><div class="stat-ico">✅</div><div class="stat-val" id="s-confirmed">—</div><div class="stat-lbl">Confirmadas</div></div>
+            <div class="stat-card gold"><div class="stat-ico">⏳</div><div class="stat-val" id="s-upcoming">—</div><div class="stat-lbl">Próximas 7 días</div></div>
+            <div class="stat-card red"><div class="stat-ico">❌</div><div class="stat-val" id="s-cancelled">—</div><div class="stat-lbl">Canceladas</div></div>
+          </div>
+
+          <!-- Citas de hoy -->
+          <div class="table-wrap">
+            <div class="table-head">
+              <div class="table-title">📅 Citas de Hoy <span class="count-badge" id="today-count">0</span></div>
+              <button class="btn btn-o btn-sm" onclick="loadDashboard()">↻ Actualizar</button>
+            </div>
+            <table class="tbl">
+              <thead><tr>
+                <th>Hora</th><th>Cliente</th><th>Servicio</th><th>Barbero</th><th>Estado</th><th></th>
+              </tr></thead>
+              <tbody id="today-tbody"><tr><td colspan="6" class="tbl-empty"><span class="ico">⏳</span>Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── TODAS LAS CITAS ── -->
+        <div class="view" id="view-citas">
+          <div class="filters">
+            <div class="fg">
+              <label class="fl">Fecha</label>
+              <input type="date" class="fc-sm" id="f-date" style="width:150px"/>
+            </div>
+            <div class="fg">
+              <label class="fl">Barbero</label>
+              <select class="fc-sm" id="f-barber">
+                <option value="">Todos</option>
+                <option value="1">Lobo (Lun–Sáb)</option>
+                <option value="2">Cachetes (Lun–Sáb)</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl">Estado</label>
+              <select class="fc-sm" id="f-status">
+                <option value="">Todos</option>
+                <option value="confirmed">Confirmadas</option>
+                <option value="cancelled">Canceladas</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl">Buscar</label>
+              <input type="text" class="fc-sm" id="f-search" placeholder="Nombre o código..." style="width:180px"/>
+            </div>
+            <div class="filter-actions">
+              <button class="btn btn-g btn-sm" onclick="loadAppointments()">Filtrar</button>
+              <button class="btn btn-o btn-sm" onclick="clearFilters()">Limpiar</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <div class="table-head">
+              <div class="table-title">📋 Citas <span class="count-badge" id="all-count">0</span></div>
+              <button class="btn btn-o btn-sm" onclick="exportCSV()">↓ Exportar CSV</button>
+            </div>
+            <table class="tbl">
+              <thead><tr>
+                <th>Código</th><th>Cliente</th><th>Servicio</th><th>Barbero</th><th>Fecha</th><th>Hora</th><th>Estado</th><th></th>
+              </tr></thead>
+              <tbody id="all-tbody"></tbody>
+            </table>
+            <div class="pag" id="pag-bar">
+              <div class="pag-info" id="pag-info"></div>
+              <div class="pag-btns" id="pag-btns"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── CALENDARIO ── -->
+        <div class="view" id="view-calendario">
+          <div class="day-nav">
+            <button class="btn btn-o btn-sm" onclick="changeDay(-1)">← Anterior</button>
+            <div class="day-nav-title" id="cal-day-title">—</div>
+            <button class="btn btn-o btn-sm" onclick="changeDay(1)">Siguiente →</button>
+          </div>
+          <div class="cal-layout">
+            <div class="cal-card">
+              <div class="cal-date-hd">🐺 Lobo <small style="font-size:.7rem;color:var(--muted)">(Lun–Sáb)</small></div>
+              <div id="cal-b1"></div>
+            </div>
+            <div class="cal-card">
+              <div class="cal-date-hd">✂️ Cachetes <small style="font-size:.7rem;color:var(--muted)">(Lun–Sáb)</small></div>
+              <div id="cal-b2"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /content -->
+    </main>
+  </div>
+</div>
+
+<!-- ── MODAL DETALLE ──────────────────────────────── -->
+<div class="overlay" id="modal-det">
+  <div class="modal">
+    <div class="mh">
+      <h3 class="mt">📋 Detalle de Cita</h3>
+      <button class="mc" onclick="closeModal()">✕</button>
+    </div>
+    <div id="det-content"></div>
+  </div>
+</div>
+
+<!-- ── TOASTS ─────────────────────────────────────── -->
+<div id="toasts"></div>
+
+<script>
+/* ══════════════════════════════════════════════
+   CONFIG — actualiza API_URL al desplegar
+══════════════════════════════════════════════ */
+const API_URL = ''; // vacío = mismo origen. Netlify proxy maneja /api/*
+
+/* ══════════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════════ */
+const ADMIN_KEY = 'mh_admin_token';
+let token = sessionStorage.getItem(ADMIN_KEY) || '';
+
+function doLogin() {
+  const pass = document.getElementById('pass-inp').value;
+  if (!pass) return;
+  // Validate against backend
+  fetch(`${API_URL}/api/admin/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: pass })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.token) {
+      token = d.token;
+      sessionStorage.setItem(ADMIN_KEY, token);
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      initApp();
+    } else {
+      document.getElementById('login-err').classList.add('vis');
+      document.getElementById('pass-inp').value = '';
+    }
+  })
+  .catch(() => toast('err','Error','No se pudo conectar al servidor.'));
+}
+
+function logout() {
+  sessionStorage.removeItem(ADMIN_KEY);
+  token = '';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+function initApp() {
+  startClock();
+  loadDashboard();
+  // Auto-refresh every 2 minutes
+  setInterval(loadDashboard, 120000);
+}
+
+// On load: check if already logged in
+window.addEventListener('DOMContentLoaded', () => {
+  if (token) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  }
+  const calDateNav = new Date().toISOString().split('T')[0];
+  calState.date = calDateNav;
+  document.getElementById('f-date').value = '';
+});
+
+function startClock() {
+  const tick = () => {
+    document.getElementById('clock').textContent =
+      new Date().toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit' });
+  };
+  tick();
+  setInterval(tick, 30000);
+}
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+const VIEW_TITLES = {
+  dashboard: '📊 Dashboard',
+  citas: '📋 Todas las Citas',
+  calendario: '📅 Vista por Día',
+};
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('act'));
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('act'));
+  document.getElementById(`view-${name}`).classList.add('act');
+  event.currentTarget.classList.add('act');
+  document.getElementById('view-title').textContent = VIEW_TITLES[name];
+  if (name === 'citas') loadAppointments();
+  if (name === 'calendario') loadCalendar();
+}
+
+/* ══════════════════════════════════════════════
+   CONSTANTS
+══════════════════════════════════════════════ */
+const SVCS = {
+  corte: 'Corte de Cabello', barba: 'Arreglo de Barba',
+  combo: 'Corte + Barba', navaja: 'Afeitado a Navaja', nino: 'Corte Niño'
+};
+const PRICES = { corte:'₡5.000', barba:'₡3.500', combo:'₡7.500', navaja:'₡4.500', nino:'₡3.500' };
+const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function fmtDate(d) {
+  const [y,m,dd] = d.split('-').map(Number);
+  const dt = new Date(y, m-1, dd);
+  return `${DAYS[dt.getDay()]} ${dd} ${MONTHS[m-1]} ${y}`;
+}
+function fmtDateShort(d) {
+  const [y,m,dd] = d.split('-').map(Number);
+  return `${dd}/${m}/${y}`;
+}
+
+/* ══════════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════════ */
+async function loadDashboard() {
+  try {
+    const [statsRes, todayRes] = await Promise.all([
+      fetch(`${API_URL}/api/admin/stats`, { headers: authHeaders() }),
+      fetch(`${API_URL}/api/admin/appointments?date=${todayStr()}&status=confirmed`, { headers: authHeaders() })
+    ]);
+
+    if (statsRes.status === 401 || todayRes.status === 401) { logout(); return; }
+
+    const stats = await statsRes.json();
+    const todayData = await todayRes.json();
+
+    document.getElementById('s-today').textContent    = stats.today ?? '—';
+    document.getElementById('s-confirmed').textContent = stats.confirmed ?? '—';
+    document.getElementById('s-upcoming').textContent  = stats.upcoming ?? '—';
+    document.getElementById('s-cancelled').textContent = stats.cancelled ?? '—';
+
+    renderTodayTable(todayData.appointments || []);
+  } catch {
+    toast('err', 'Error', 'No se pudieron cargar las estadísticas.');
+  }
+}
+
+function todayStr() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function renderTodayTable(appts) {
+  const tbody = document.getElementById('today-tbody');
+  document.getElementById('today-count').textContent = appts.length;
+  if (!appts.length) {
+    tbody.innerHTML = `<tr><td colspan="6" class="tbl-empty"><span class="ico">☀️</span>No hay citas para hoy</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = appts
+    .sort((a,b) => a.time.localeCompare(b.time))
+    .map(a => `
+      <tr>
+        <td><strong style="color:var(--gold)">${a.time}</strong></td>
+        <td>${a.clientName}</td>
+        <td>${SVCS[a.service]||a.service}</td>
+        <td><span class="badge ${a.barberId===1?'warn':'info'}" style="${a.barberId===2?'background:rgba(33,150,243,.1);color:var(--info);border-color:rgba(33,150,243,.25)':''}">B${a.barberId}</span></td>
+        <td><span class="badge ok">✅ Confirmada</span></td>
+        <td><button class="btn-icon" onclick="openDetail('${a.code}')">👁</button></td>
+      </tr>`).join('');
+}
+
+/* ══════════════════════════════════════════════
+   ALL APPOINTMENTS
+══════════════════════════════════════════════ */
+let pg = { page: 1, limit: 15, total: 0 };
+let allData = [];
+
+async function loadAppointments() {
+  const tbody = document.getElementById('all-tbody');
+  tbody.innerHTML = `<tr class="loading-row"><td colspan="8"><span class="spin"></span></td></tr>`;
+
+  const date    = document.getElementById('f-date').value;
+  const barber  = document.getElementById('f-barber').value;
+  const status  = document.getElementById('f-status').value;
+  const search  = document.getElementById('f-search').value.trim();
+
+  let qs = `?page=${pg.page}&limit=${pg.limit}`;
+  if (date)   qs += `&date=${date}`;
+  if (barber) qs += `&barberId=${barber}`;
+  if (status) qs += `&status=${status}`;
+  if (search) qs += `&search=${encodeURIComponent(search)}`;
+
+  try {
+    const res = await fetch(`${API_URL}/api/admin/appointments${qs}`, { headers: authHeaders() });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    allData = data.appointments || [];
+    pg.total = data.total || 0;
+    renderAllTable(allData);
+    renderPagination(data.total, data.page, data.pages);
+    document.getElementById('all-count').textContent = data.total || 0;
+  } catch {
+    tbody.innerHTML = `<tr><td colspan="8" class="tbl-empty"><span class="ico">❌</span>Error al cargar citas</td></tr>`;
+  }
+}
+
+function renderAllTable(appts) {
+  const tbody = document.getElementById('all-tbody');
+  if (!appts.length) {
+    tbody.innerHTML = `<tr><td colspan="8" class="tbl-empty"><span class="ico">🔍</span>No se encontraron citas</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = appts.map(a => {
+    const isPast = new Date(`${a.date}T${a.time}:00`) < new Date();
+    return `
+      <tr>
+        <td class="code-cell">${a.code}</td>
+        <td>
+          <div style="font-weight:500">${a.clientName}</div>
+          <div style="font-size:.75rem;color:var(--muted)">${a.clientPhone}</div>
+        </td>
+        <td>${SVCS[a.service]||a.service}</td>
+        <td><span class="badge ${a.barberId===1?'warn':'info'}" style="${a.barberId===2?'background:rgba(33,150,243,.1);color:var(--info);border-color:rgba(33,150,243,.25)':''}">${a.barberId===1?'Lobo':'Cachetes'}</span></td>
+        <td>${fmtDateShort(a.date)}</td>
+        <td><strong style="color:var(--gold)">${a.time}</strong></td>
+        <td>${a.status==='confirmed'
+          ? (isPast ? '<span class="badge warn">⏰ Pasada</span>' : '<span class="badge ok">✅ Confirmada</span>')
+          : '<span class="badge err">❌ Cancelada</span>'
+        }</td>
+        <td>
+          <div class="action-btns">
+            <button class="btn-icon" title="Ver detalle" onclick="openDetail('${a.code}')">👁</button>
+            ${a.status==='confirmed' ? `<button class="btn-icon del" title="Cancelar" onclick="adminCancel('${a.code}')">🗑</button>` : ''}
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+function renderPagination(total, page, pages) {
+  const info = document.getElementById('pag-info');
+  const btns = document.getElementById('pag-btns');
+  const from = ((page-1) * pg.limit) + 1;
+  const to   = Math.min(page * pg.limit, total);
+  info.textContent = total ? `Mostrando ${from}–${to} de ${total}` : '';
+
+  let html = `<button class="pag-btn" ${page<=1?'disabled':''} onclick="changePage(${page-1})">‹</button>`;
+  const start = Math.max(1, page-2), end = Math.min(pages, page+2);
+  for (let i = start; i <= end; i++) {
+    html += `<button class="pag-btn ${i===page?'act':''}" onclick="changePage(${i})">${i}</button>`;
+  }
+  html += `<button class="pag-btn" ${page>=pages?'disabled':''} onclick="changePage(${page+1})">›</button>`;
+  btns.innerHTML = html;
+}
+
+function changePage(n) { pg.page = n; loadAppointments(); }
+function clearFilters() {
+  document.getElementById('f-date').value = '';
+  document.getElementById('f-barber').value = '';
+  document.getElementById('f-status').value = '';
+  document.getElementById('f-search').value = '';
+  pg.page = 1;
+  loadAppointments();
+}
+
+/* ══════════════════════════════════════════════
+   CALENDAR VIEW
+══════════════════════════════════════════════ */
+const calState = { date: new Date().toISOString().split('T')[0] };
+
+function changeDay(delta) {
+  const [y,m,d] = calState.date.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  dt.setDate(dt.getDate() + delta);
+  calState.date = dt.toISOString().split('T')[0];
+  loadCalendar();
+}
+
+async function loadCalendar() {
+  const title = document.getElementById('cal-day-title');
+  title.textContent = fmtDate(calState.date);
+
+  document.getElementById('cal-b1').innerHTML = '<div class="cal-empty"><span class="spin"></span></div>';
+  document.getElementById('cal-b2').innerHTML = '<div class="cal-empty"><span class="spin"></span></div>';
+
+  try {
+    const res = await fetch(
+      `${API_URL}/api/admin/appointments?date=${calState.date}&status=confirmed`,
+      { headers: authHeaders() }
+    );
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    const appts = data.appointments || [];
+
+    renderCalBarber(1, appts.filter(a => a.barberId === 1));
+    renderCalBarber(2, appts.filter(a => a.barberId === 2));
+  } catch {
+    ['cal-b1','cal-b2'].forEach(id => {
+      document.getElementById(id).innerHTML = '<div class="cal-empty">Error al cargar</div>';
+    });
+  }
+}
+
+function renderCalBarber(bId, appts) {
+  const el = document.getElementById(`cal-b${bId}`);
+  // Check if barber 1 works on this day
+  if (bId === 1) {
+    const [y,m,d] = calState.date.split('-').map(Number);
+    const day = new Date(y,m-1,d).getDay();
+    if (day === 0) {
+      el.innerHTML = '<div class="cal-empty">🚫 No trabaja los domingos</div>';
+      return;
+    }
+  }
+  if (!appts.length) {
+    el.innerHTML = '<div class="cal-empty">✨ Sin citas este día</div>';
+    return;
+  }
+  el.innerHTML = appts
+    .sort((a,b) => a.time.localeCompare(b.time))
+    .map(a => `
+      <div class="cal-appt-item" onclick="openDetail('${a.code}')">
+        <div class="cal-time">${a.time}</div>
+        <div class="cal-info">
+          <div class="cal-name">${a.clientName}</div>
+          <div class="cal-svc">${SVCS[a.service]||a.service} · ${PRICES[a.service]||''}</div>
+        </div>
+      </div>`).join('');
+}
+
+/* ══════════════════════════════════════════════
+   DETAIL MODAL
+══════════════════════════════════════════════ */
+async function openDetail(code) {
+  document.getElementById('modal-det').classList.add('open');
+  document.getElementById('det-content').innerHTML = '<div style="text-align:center;padding:2rem"><span class="spin"></span></div>';
+  try {
+    const res = await fetch(`${API_URL}/api/admin/appointments/${code}`, { headers: authHeaders() });
+    const a = await res.json();
+    const isPast = new Date(`${a.date}T${a.time}:00`) < new Date();
+    const canCancel = a.status === 'confirmed' && !isPast &&
+      (new Date(`${a.date}T${a.time}:00`) - new Date()) / 3600000 >= 24;
+
+    document.getElementById('det-content').innerHTML = `
+      <div class="det-grid">
+        <div class="det-item full">
+          <div class="det-label">Código de Cita</div>
+          <div class="det-val gold">${a.code}</div>
+        </div>
+        <div class="det-item">
+          <div class="det-label">Cliente</div>
+          <div class="det-val">${a.clientName}</div>
+        </div>
+        <div class="det-item">
+          <div class="det-label">Teléfono</div>
+          <div class="det-val">${a.clientPhone}</div>
+        </div>
+        ${a.clientEmail ? `
+        <div class="det-item full">
+          <div class="det-label">Email</div>
+          <div class="det-val">${a.clientEmail}</div>
+        </div>` : ''}
+        <div class="det-item">
+          <div class="det-label">Servicio</div>
+          <div class="det-val">${SVCS[a.service]||a.service}</div>
+        </div>
+        <div class="det-item">
+          <div class="det-label">Precio</div>
+          <div class="det-val" style="color:var(--gold)">${PRICES[a.service]||'—'}</div>
+        </div>
+        <div class="det-item">
+          <div class="det-label">Barbero</div>
+          <div class="det-val">${a.barberId===1?'Lobo':'Cachetes'} (Lun–Sáb)</div>
+        </div>
+        <div class="det-item">
+          <div class="det-label">Estado</div>
+          <div class="det-val">${a.status==='confirmed'?'<span class="badge ok">✅ Confirmada</span>':'<span class="badge err">❌ Cancelada</span>'}</div>
+        </div>
+        <div class="det-item">
+          <div class="det-label">Fecha</div>
+          <div class="det-val">${fmtDate(a.date)}</div>
+        </div>
+        <div class="det-item">
+          <div class="det-label">Hora</div>
+          <div class="det-val" style="color:var(--gold);font-weight:600;font-size:1.1rem">${a.time}</div>
+        </div>
+        <div class="det-item full">
+          <div class="det-label">Creada el</div>
+          <div class="det-val" style="color:var(--muted);font-size:.82rem">${new Date(a.createdAt).toLocaleString('es-CR')}</div>
+        </div>
+      </div>
+      <div class="modal-acts">
+        ${canCancel ? `<button class="btn btn-d" onclick="adminCancel('${a.code}',true)">🗑 Cancelar Cita</button>` : ''}
+        <button class="btn btn-o" onclick="closeModal()">Cerrar</button>
+      </div>`;
+  } catch {
+    document.getElementById('det-content').innerHTML = '<p style="color:var(--muted);text-align:center">Error al cargar los datos</p>';
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ADMIN CANCEL (sin restricción 24h para admin)
+══════════════════════════════════════════════ */
+async function adminCancel(code, fromModal = false) {
+  if (!confirm(`¿Cancelar la cita ${code}?`)) return;
+  try {
+    const res = await fetch(`${API_URL}/api/admin/appointments/${code}/cancel`, {
+      method: 'POST', headers: authHeaders()
+    });
+    const d = await res.json();
+    if (res.ok) {
+      toast('ok', 'Cita cancelada', `Código: ${code}`);
+      if (fromModal) closeModal();
+      loadDashboard();
+      if (document.getElementById('view-citas').classList.contains('act')) loadAppointments();
+      if (document.getElementById('view-calendario').classList.contains('act')) loadCalendar();
+    } else {
+      toast('err', 'Error', d.error);
+    }
+  } catch {
+    toast('err', 'Error', 'No se pudo cancelar.');
+  }
+}
+
+/* ══════════════════════════════════════════════
+   EXPORT CSV
+══════════════════════════════════════════════ */
+function exportCSV() {
+  if (!allData.length) { toast('info','Sin datos','Carga citas primero.'); return; }
+  const headers = ['Código','Cliente','Teléfono','Email','Servicio','Barbero','Fecha','Hora','Estado'];
+  const rows = allData.map(a => [
+    a.code, a.clientName, a.clientPhone, a.clientEmail||'',
+    SVCS[a.service]||a.service, a.barberId===1?'Lobo':'Cachetes',
+    a.date, a.time, a.status
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `lobo-barber-citas-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  toast('ok','CSV exportado','Archivo descargado.');
+}
+
+/* ══════════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════════ */
+function closeModal() {
+  document.getElementById('modal-det').classList.remove('open');
+}
+document.getElementById('modal-det').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-det')) closeModal();
+});
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+function toast(type, title, msg) {
+  const ico = { ok:'✅', err:'❌', info:'ℹ️' };
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span class="ti">${ico[type]||'ℹ️'}</span><div><div class="tt">${title}</div>${msg?`<div class="tm">${msg}</div>`:''}</div>`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, 4000);
+}
+</script>
+</body>
+</html>
