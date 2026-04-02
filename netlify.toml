@@ -5,7 +5,7 @@
 # IMPORTANTE: reemplaza la URL con la de tu nueva app en Railway después de desplegar
 [[redirects]]
   from   = "/api/*"
-  to     = "https://lobo-barber-production.up.railway.app/api/:splat"
+  to     = "https://lobobarber-page-production.up.railway.app/api/:splat"
   status = 200
   force  = true
   headers = { X-From = "Netlify" }
