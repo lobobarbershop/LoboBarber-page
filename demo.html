@@ -17,7 +17,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 :root{
-  --red:#DC2626; --red-l:#EF4444; --red-d:#991B1B;
+  --red:#C9A84C; --red-l:#D4B866; --red-d:#8B6914;
   --black:#080808; --dark:#0E0E0E; --card:#131313; --card2:#1A1A1A;
   --border:#222222; --border2:#2E2E2E;
   --text:#F0EDE8; --muted:#7A7A7A; --dim:#444444;
@@ -35,7 +35,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 #intro.out{opacity:0;visibility:hidden;pointer-events:none}
 .i-wolf{animation:wolfPop .9s cubic-bezier(.34,1.56,.64,1) .1s both}
 @keyframes wolfPop{from{transform:scale(0) rotate(-20deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
-.i-wolf svg{filter:drop-shadow(0 0 30px rgba(220,38,38,.5))}
+.i-wolf svg{filter:drop-shadow(0 0 30px rgba(201,168,76,.5))}
 .i-title{display:flex;gap:2px;margin-top:1.25rem}
 .i-letter{font-family:'Oswald',sans-serif;font-size:clamp(3.5rem,14vw,5.5rem);font-weight:700;color:var(--text);line-height:1;animation:letterPop .45s cubic-bezier(.34,1.56,.64,1) calc(.85s + var(--i) * .09s) both}
 @keyframes letterPop{from{transform:translateY(50px) scale(.5);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
@@ -50,7 +50,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* ══ NAVBAR ══════════════════════════════════ */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);height:68px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{display:flex;align-items:center;gap:11px}
-.nav-logo-ico{width:40px;height:40px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(220,38,38,.3);flex-shrink:0}
+.nav-logo-ico{width:40px;height:40px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(201,168,76,.3);flex-shrink:0}
 .nav-logo-txt{font-family:'Oswald',sans-serif;font-size:1.35rem;font-weight:700;letter-spacing:2px}
 .nav-logo-txt span{color:var(--red)}
 .nav-links{display:flex;gap:.4rem;align-items:center}
@@ -61,19 +61,19 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 @media(max-width:640px){.nb:not(.nb-red){display:none}}
 
 /* ══ HERO ════════════════════════════════════ */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 1.5rem 70px;position:relative;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(220,38,38,.1) 0%,transparent 60%),var(--black);overflow:hidden}
-.hero-bg{position:absolute;font-family:'Oswald',sans-serif;font-size:clamp(12rem,35vw,26rem);font-weight:700;color:rgba(220,38,38,.04);pointer-events:none;user-select:none;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;z-index:0}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 1.5rem 70px;position:relative;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,168,76,.1) 0%,transparent 60%),var(--black);overflow:hidden}
+.hero-bg{position:absolute;font-family:'Oswald',sans-serif;font-size:clamp(12rem,35vw,26rem);font-weight:700;color:rgba(201,168,76,.04);pointer-events:none;user-select:none;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;z-index:0}
 .hero>*:not(.hero-bg){position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 16px;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);border-radius:100px;font-size:.72rem;color:var(--red-l);letter-spacing:3px;text-transform:uppercase;margin-bottom:1.5rem}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 16px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:100px;font-size:.72rem;color:var(--red-l);letter-spacing:3px;text-transform:uppercase;margin-bottom:1.5rem}
 .hero-logo{width:110px;height:110px;margin:0 auto 1.5rem;background:var(--card);border:2px solid var(--red-d);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:pulse 3s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 40px rgba(220,38,38,.2)}50%{box-shadow:0 0 70px rgba(220,38,38,.38)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 40px rgba(201,168,76,.2)}50%{box-shadow:0 0 70px rgba(201,168,76,.38)}}
 .hero h1{font-family:'Oswald',sans-serif;font-size:clamp(3.5rem,10vw,7rem);font-weight:700;line-height:.95;letter-spacing:4px;margin-bottom:.75rem}
 .hero h1 span{color:var(--red)}
 .hero-sub{font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(1.05rem,2.5vw,1.35rem);color:var(--muted);margin-bottom:2.5rem}
 .hero-cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 30px;border-radius:6px;font-size:.93rem;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:'Inter',sans-serif}
-.btn-r{background:var(--red);color:white;box-shadow:0 4px 24px rgba(220,38,38,.35)}
-.btn-r:hover{background:var(--red-l);transform:translateY(-2px);box-shadow:0 8px 32px rgba(220,38,38,.45)}
+.btn-r{background:var(--red);color:white;box-shadow:0 4px 24px rgba(201,168,76,.35)}
+.btn-r:hover{background:var(--red-l);transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,168,76,.45)}
 .btn-o{background:transparent;color:var(--text);border:1px solid var(--border2)}
 .btn-o:hover{border-color:var(--red);color:var(--red);transform:translateY(-2px)}
 .btn-d{background:transparent;color:var(--err);border:1px solid rgba(239,68,68,.4)}
@@ -100,9 +100,9 @@ section{padding:80px 1.5rem;position:relative;z-index:1}
 #servicios{background:var(--dark)}
 .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.2rem}
 .svc-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.75rem 1.4rem;text-align:center;transition:all .25s;cursor:default;position:relative;overflow:hidden}
-.svc-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(220,38,38,.07),transparent);opacity:0;transition:opacity .25s}
+.svc-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.07),transparent);opacity:0;transition:opacity .25s}
 .svc-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
-.svc-card:hover{border-color:rgba(220,38,38,.4);transform:translateY(-5px)}
+.svc-card:hover{border-color:rgba(201,168,76,.4);transform:translateY(-5px)}
 .svc-card:hover::before{opacity:1}
 .svc-card:hover::after{transform:scaleX(1)}
 .svc-ico{font-size:2rem;margin-bottom:.9rem;display:block}
@@ -114,10 +114,10 @@ section{padding:80px 1.5rem;position:relative;z-index:1}
 #barberos{background:var(--black)}
 .brb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem;max-width:680px;margin:0 auto}
 .brb-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;transition:border-color .25s,transform .25s}
-.brb-card:hover{border-color:rgba(220,38,38,.4);transform:translateY(-4px)}
+.brb-card:hover{border-color:rgba(201,168,76,.4);transform:translateY(-4px)}
 .brb-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,transparent,var(--red),transparent)}
-.brb-num{position:absolute;top:1.25rem;right:1.5rem;font-family:'Oswald',sans-serif;font-size:3.5rem;font-weight:700;color:rgba(220,38,38,.07);line-height:1;pointer-events:none}
-.brb-ava{width:88px;height:88px;background:linear-gradient(135deg,var(--red-d),var(--red));border-radius:50%;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;font-size:2.4rem;border:3px solid var(--border2);box-shadow:0 0 30px rgba(220,38,38,.2)}
+.brb-num{position:absolute;top:1.25rem;right:1.5rem;font-family:'Oswald',sans-serif;font-size:3.5rem;font-weight:700;color:rgba(201,168,76,.07);line-height:1;pointer-events:none}
+.brb-ava{width:88px;height:88px;background:linear-gradient(135deg,var(--red-d),var(--red));border-radius:50%;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;font-size:2.4rem;border:3px solid var(--border2);box-shadow:0 0 30px rgba(201,168,76,.2)}
 .brb-name{font-family:'Oswald',sans-serif;font-size:1.8rem;font-weight:700;letter-spacing:3px;margin-bottom:.2rem}
 .brb-title{color:var(--red);font-size:.75rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:1.2rem}
 .brb-sched{background:var(--card2);border-radius:8px;padding:.9rem 1.15rem;font-size:.84rem;color:var(--muted)}
@@ -127,11 +127,11 @@ section{padding:80px 1.5rem;position:relative;z-index:1}
 #trabajos{background:var(--dark)}
 .works-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
 .work-card{border-radius:12px;overflow:hidden;background:var(--card);border:1px solid var(--border);transition:transform .3s,border-color .3s,box-shadow .3s;cursor:pointer}
-.work-card:hover{transform:translateY(-6px);border-color:rgba(220,38,38,.45);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.work-card:hover{transform:translateY(-6px);border-color:rgba(201,168,76,.45);box-shadow:0 16px 40px rgba(0,0,0,.5)}
 .work-img{height:200px;position:relative;overflow:hidden}
 .work-img::after{content:'✂';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3rem;opacity:.12;color:white}
 .wi-1{background:linear-gradient(135deg,#1a0a0a 0%,#3d0c0c 40%,#200808 100%)}
-.wi-1::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 8px,rgba(220,38,38,.04) 8px,rgba(220,38,38,.04) 16px)}
+.wi-1::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 8px,rgba(201,168,76,.04) 8px,rgba(201,168,76,.04) 16px)}
 .wi-2{background:linear-gradient(135deg,#080e1a 0%,#0d1f3c 50%,#0a1020 100%)}
 .wi-2::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 70%,rgba(59,130,246,.08),transparent 60%)}
 .wi-3{background:linear-gradient(135deg,#0d1a0d 0%,#1a3d1a 50%,#0a200a 100%)}
@@ -165,7 +165,7 @@ section{padding:80px 1.5rem;position:relative;z-index:1}
 .step-it:not(:last-child)::after{content:'';position:absolute;top:14px;left:calc(50% + 14px);right:calc(-50% + 14px);height:1px;background:var(--border2);transition:background .3s}
 .step-it.done:not(:last-child)::after,.step-it.active:not(:last-child)::after{background:var(--red)}
 .step-ci{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:600;color:var(--dim);transition:all .3s;background:var(--card);position:relative;z-index:1}
-.step-it.active .step-ci{border-color:var(--red);color:var(--red);background:rgba(220,38,38,.1);box-shadow:0 0 14px rgba(220,38,38,.28)}
+.step-it.active .step-ci{border-color:var(--red);color:var(--red);background:rgba(201,168,76,.1);box-shadow:0 0 14px rgba(201,168,76,.28)}
 .step-it.done .step-ci{border-color:var(--red);background:var(--red);color:white}
 .step-lb{font-size:.62rem;color:var(--dim);text-transform:uppercase;letter-spacing:.8px}
 .step-it.active .step-lb{color:var(--red)}.step-it.done .step-lb{color:var(--muted)}
@@ -189,7 +189,7 @@ select.fc{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 .brb-opts{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
 .brb-opt{background:var(--card2);border:2px solid var(--border);border-radius:10px;padding:1.2rem 1rem;text-align:center;cursor:pointer;transition:all .2s}
 .brb-opt:hover{border-color:var(--border2)}
-.brb-opt.sel{border-color:var(--red);background:rgba(220,38,38,.08)}
+.brb-opt.sel{border-color:var(--red);background:rgba(201,168,76,.08)}
 .brb-opt-ava{font-size:1.75rem;margin-bottom:.45rem}
 .brb-opt-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:1rem;letter-spacing:1px;margin-bottom:.2rem}
 .brb-opt-days{font-size:.7rem;color:var(--muted)}
@@ -269,7 +269,7 @@ select.fc{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='
 
 /* ══ SPINNER ═════════════════════════════════ */
 .spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:sp .55s linear infinite;display:inline-block;vertical-align:middle}
-.spin-r{border-color:rgba(220,38,38,.2);border-top-color:var(--red)}
+.spin-r{border-color:rgba(201,168,76,.2);border-top-color:var(--red)}
 @keyframes sp{to{transform:rotate(360deg)}}
 
 /* ══ FOOTER ══════════════════════════════════ */
@@ -305,19 +305,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
 <!-- ══ INTRO ══════════════════════════════════════ -->
 <div id="intro" aria-hidden="true">
   <div>
-    <div class="i-wolf">
-      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" width="110" height="110">
-        <path d="M28,52 L16,14 L46,44 Z" fill="#DC2626"/>
-        <path d="M92,52 L104,14 L74,44 Z" fill="#DC2626"/>
-        <ellipse cx="60" cy="68" rx="38" ry="36" fill="#DC2626"/>
-        <ellipse cx="60" cy="83" rx="20" ry="14" fill="#1a1a1a"/>
-        <ellipse cx="44" cy="63" rx="7" ry="6" fill="#1a1a1a"/>
-        <circle cx="46" cy="61" r="2.5" fill="#EF4444" opacity=".9"/>
-        <ellipse cx="76" cy="63" rx="7" ry="6" fill="#1a1a1a"/>
-        <circle cx="78" cy="61" r="2.5" fill="#EF4444" opacity=".9"/>
-        <ellipse cx="60" cy="75" rx="6" ry="4" fill="#080808"/>
-      </svg>
-    </div>
+
     <div class="i-title">
       <span class="i-letter" style="--i:0">L</span>
       <span class="i-letter" style="--i:1">O</span>
@@ -335,16 +323,6 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
 <!-- ══ NAVBAR ═════════════════════════════════════ -->
 <nav class="nav">
   <a href="#inicio" class="nav-logo" onclick="goTo('#inicio')">
-    <div class="nav-logo-ico">
-      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-        <path d="M14,26 L8,7 L23,22 Z" fill="white"/>
-        <path d="M46,26 L52,7 L37,22 Z" fill="white"/>
-        <ellipse cx="30" cy="34" rx="19" ry="18" fill="white"/>
-        <ellipse cx="30" cy="42" rx="10" ry="7" fill="#DC2626"/>
-        <ellipse cx="22" cy="31" rx="3.5" ry="3" fill="#DC2626"/>
-        <ellipse cx="38" cy="31" rx="3.5" ry="3" fill="#DC2626"/>
-      </svg>
-    </div>
     <span class="nav-logo-txt">LOBO<span>BARBER</span></span>
   </a>
   <div class="nav-links">
@@ -360,19 +338,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
 <section class="hero" id="inicio">
   <div class="hero-bg" aria-hidden="true">LOBO</div>
   <span class="hero-badge">✦ Barbería Premium ✦</span>
-  <div class="hero-logo">
-    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" width="70" height="70">
-      <path d="M28,52 L16,14 L46,44 Z" fill="#DC2626"/>
-      <path d="M92,52 L104,14 L74,44 Z" fill="#DC2626"/>
-      <ellipse cx="60" cy="68" rx="38" ry="36" fill="#DC2626"/>
-      <ellipse cx="60" cy="83" rx="20" ry="14" fill="#0A0A0A"/>
-      <ellipse cx="44" cy="63" rx="7" ry="6" fill="#0A0A0A"/>
-      <circle cx="46" cy="61" r="2.5" fill="#FF6B6B"/>
-      <ellipse cx="76" cy="63" rx="7" ry="6" fill="#0A0A0A"/>
-      <circle cx="78" cy="61" r="2.5" fill="#FF6B6B"/>
-      <ellipse cx="60" cy="75" rx="6" ry="4" fill="#050505"/>
-    </svg>
-  </div>
+
   <h1>LOBO<br><span>BARBER</span><br>SHOP</h1>
   <p class="hero-sub">Donde el estilo se convierte en arte</p>
   <div class="hero-cta">
@@ -642,16 +608,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
 
 <!-- ══ FOOTER ═════════════════════════════════════ -->
 <footer>
-  <div class="ft-wolf">
-    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="40" height="40" opacity=".25">
-      <path d="M18,34 L10,9 L30,29 Z" fill="#DC2626"/>
-      <path d="M62,34 L70,9 L50,29 Z" fill="#DC2626"/>
-      <ellipse cx="40" cy="45" rx="26" ry="24" fill="#DC2626"/>
-      <ellipse cx="40" cy="55" rx="13" ry="9" fill="#0A0A0A"/>
-      <ellipse cx="29" cy="42" rx="5" ry="4" fill="#0A0A0A"/>
-      <ellipse cx="51" cy="42" rx="5" ry="4" fill="#0A0A0A"/>
-    </svg>
-  </div>
+
   <div class="ft-logo">LOBO<span>BARBER</span> SHOP</div>
   <div class="ft-tag">Donde el estilo se convierte en arte</div>
   <div class="ft-links">
