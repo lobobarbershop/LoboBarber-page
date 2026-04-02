@@ -192,6 +192,11 @@ async function loadSlots() {
     const data = await res.json();
     loading.style.display = 'none';
 
+    if (!res.ok) {
+      container.innerHTML = `<div class="slots-empty">❌ Error del servidor (${res.status}). Verifica la conexión e intenta de nuevo.</div>`;
+      return;
+    }
+
     if (!data.worksToday) {
       container.innerHTML = `<div class="slots-empty">🚫 El barbero no trabaja este día.<br><small style="color:var(--text-dim)">Lobo y Cachetes trabajan Lun–Sáb</small></div>`;
       return;
