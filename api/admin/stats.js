@@ -1,5 +1,5 @@
 const connectDB = require('../_lib/mongodb');
-const Appointment = require('../_lib/models');
+const { Appointment } = require('../_lib/models');
 const setCors = require('../_lib/cors');
 const adminAuth = require('../_lib/auth');
 

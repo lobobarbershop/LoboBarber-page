@@ -255,6 +255,15 @@ select.fc-sm{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w
         <div class="sb-item" onclick="showView('calendario')">
           <span class="ico">📅</span><span>Vista por Día</span>
         </div>
+        <div class="sb-item" onclick="showView('reportes')">
+          <span class="ico">📈</span><span>Reportes</span>
+        </div>
+        <div class="sb-item" onclick="showView('horarios')">
+          <span class="ico">🗓️</span><span>Horarios</span>
+        </div>
+        <div class="sb-item" onclick="showView('ia-config')">
+          <span class="ico">🤖</span><span>Config. IA</span>
+        </div>
       </nav>
       <div class="sb-footer">
         <div class="sb-user">
@@ -371,6 +380,88 @@ select.fc-sm{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w
           </div>
         </div>
 
+        <!-- ── REPORTES ── -->
+        <div class="view" id="view-reportes">
+          <!-- Navegación de semana -->
+          <div class="day-nav" style="margin-bottom:1.5rem">
+            <button class="btn btn-o btn-sm" onclick="changeWeek(-1)">← Semana anterior</button>
+            <div class="day-nav-title" id="report-week-label">—</div>
+            <button class="btn btn-o btn-sm" onclick="changeWeek(1)">Semana siguiente →</button>
+          </div>
+
+          <!-- Tarjetas resumen -->
+          <div class="stats-grid" id="report-summary" style="margin-bottom:1.5rem"></div>
+
+          <!-- Tabla por barbero - Lobo -->
+          <div class="table-wrap" style="margin-bottom:1.5rem">
+            <div class="table-head">
+              <div class="table-title">🐺 Lobo</div>
+            </div>
+            <div id="report-b1" style="padding:1.25rem 1.4rem"></div>
+          </div>
+
+          <!-- Tabla por barbero - Cachetes -->
+          <div class="table-wrap">
+            <div class="table-head">
+              <div class="table-title">✂️ Cachetes</div>
+            </div>
+            <div id="report-b2" style="padding:1.25rem 1.4rem"></div>
+          </div>
+        </div>
+
+        <!-- ── HORARIOS ── -->
+        <div class="view" id="view-horarios">
+
+          <!-- Config por barbero -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem" id="barber-settings-grid">
+            <div class="table-wrap">
+              <div class="table-head"><div class="table-title">🐺 Lobo — Configuración</div></div>
+              <div id="settings-b1" style="padding:1.25rem 1.4rem"><div class="tbl-empty"><span class="spin"></span></div></div>
+            </div>
+            <div class="table-wrap">
+              <div class="table-head"><div class="table-title">✂️ Cachetes — Configuración</div></div>
+              <div id="settings-b2" style="padding:1.25rem 1.4rem"><div class="tbl-empty"><span class="spin"></span></div></div>
+            </div>
+          </div>
+
+          <!-- Excepciones de horario -->
+          <div class="table-wrap">
+            <div class="table-head">
+              <div class="table-title">🚫 Excepciones de Horario</div>
+              <button class="btn btn-g btn-sm" onclick="openExceptionModal()">+ Agregar</button>
+            </div>
+            <table class="tbl">
+              <thead><tr>
+                <th>Barbero</th><th>Fecha</th><th>Tipo</th><th>Detalle</th><th></th>
+              </tr></thead>
+              <tbody id="exceptions-tbody"><tr><td colspan="5" class="tbl-empty"><span class="spin"></span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── IA CONFIG ── -->
+        <div class="view" id="view-ia-config">
+          <div class="table-wrap" style="max-width:800px">
+            <div class="table-head">
+              <div class="table-title">🤖 Prompt del Asistente de WhatsApp</div>
+              <button class="btn btn-o btn-sm" onclick="loadBotConfig()">↻ Recargar</button>
+            </div>
+            <div style="padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:1rem">
+              <p style="font-size:.83rem;color:var(--muted);line-height:1.6">
+                Este es el texto que guía las respuestas de la IA cuando un cliente escribe por WhatsApp.
+                Puedes personalizarlo con información del negocio, instrucciones de tono, o políticas.
+              </p>
+              <textarea id="prompt-textarea" class="fc" rows="18"
+                style="resize:vertical;min-height:320px;line-height:1.6;font-family:monospace;font-size:.84rem"
+                placeholder="Cargando prompt..."></textarea>
+              <div style="display:flex;gap:.75rem">
+                <button class="btn btn-g" style="width:auto;padding:10px 28px" onclick="saveBotConfig()">💾 Guardar Prompt</button>
+                <button class="btn btn-o btn-sm" onclick="resetToDefaultPrompt()">↺ Restaurar default</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div><!-- /content -->
     </main>
   </div>
@@ -384,6 +475,56 @@ select.fc-sm{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w
       <button class="mc" onclick="closeModal()">✕</button>
     </div>
     <div id="det-content"></div>
+  </div>
+</div>
+
+<!-- ── MODAL EXCEPCIÓN ───────────────────────────── -->
+<div class="overlay" id="overlay-exception">
+  <div class="modal" style="max-width:440px">
+    <div class="mh">
+      <h3 class="mt">🗓️ Agregar Excepción</h3>
+      <button class="mc" onclick="document.getElementById('overlay-exception').classList.remove('open')">✕</button>
+    </div>
+    <form id="exc-form" onsubmit="event.preventDefault();saveException()">
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="fg">
+          <label class="fl">Barbero</label>
+          <select class="fc-sm" id="exc-barber" style="width:100%" required>
+            <option value="">Selecciona...</option>
+            <option value="1">🐺 Lobo</option>
+            <option value="2">✂️ Cachetes</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Fecha</label>
+          <input type="date" class="fc-sm" id="exc-date" style="width:100%" required/>
+        </div>
+        <div class="fg">
+          <label class="fl">Tipo</label>
+          <select class="fc-sm" id="exc-type" style="width:100%" required
+            onchange="document.getElementById('exc-custom-hours').style.display=this.value==='custom_hours'?'flex':'none'">
+            <option value="">Selecciona...</option>
+            <option value="day_off">Día libre (no trabaja)</option>
+            <option value="custom_hours">Horario especial</option>
+          </select>
+        </div>
+        <div id="exc-custom-hours" style="display:none;gap:.75rem">
+          <div class="fg" style="flex:1">
+            <label class="fl">Desde</label>
+            <input type="time" class="fc-sm" id="exc-start" style="width:100%"/>
+          </div>
+          <div class="fg" style="flex:1">
+            <label class="fl">Hasta</label>
+            <input type="time" class="fc-sm" id="exc-end" style="width:100%"/>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Nota (opcional)</label>
+          <input type="text" class="fc-sm" id="exc-note" placeholder="Ej: Vacaciones" style="width:100%"/>
+        </div>
+        <button type="submit" class="btn btn-g">Guardar excepción</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -476,6 +617,9 @@ const VIEW_TITLES = {
   dashboard: '📊 Dashboard',
   citas: '📋 Todas las Citas',
   calendario: '📅 Vista por Día',
+  reportes:  '📈 Reportes Semanales',
+  horarios:  '🗓️ Gestión de Horarios',
+  'ia-config': '🤖 Configuración de IA',
 };
 
 function showView(name) {
@@ -486,6 +630,9 @@ function showView(name) {
   document.getElementById('view-title').textContent = VIEW_TITLES[name];
   if (name === 'citas') loadAppointments();
   if (name === 'calendario') loadCalendar();
+  if (name === 'reportes')  loadWeeklyReport();
+  if (name === 'horarios')  loadScheduleView();
+  if (name === 'ia-config') loadBotConfig();
 }
 
 /* ══════════════════════════════════════════════
@@ -495,7 +642,8 @@ const SVCS = {
   corte: 'Corte de Cabello', barba: 'Arreglo de Barba',
   combo: 'Corte + Barba', navaja: 'Afeitado a Navaja', nino: 'Corte Niño'
 };
-const PRICES = { corte:'₡5.000', barba:'₡3.500', combo:'₡7.500', navaja:'₡4.500', nino:'₡3.500' };
+const PRICES = { corte:'₡8.000', barba:'₡5.000', combo:'₡12.000', navaja:'₡6.000', nino:'₡5.000' };
+const PRICES_NUM = { corte: 8000, barba: 5000, combo: 12000, navaja: 6000, nino: 5000 };
 const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
@@ -841,6 +989,276 @@ function closeModal() {
 document.getElementById('modal-det').addEventListener('click', e => {
   if (e.target === document.getElementById('modal-det')) closeModal();
 });
+
+/* ══════════════════════════════════════════════
+   REPORTES SEMANALES
+══════════════════════════════════════════════ */
+const reportState = { weekStart: getMondayStr(new Date()) };
+
+function getMondayStr(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  return d.toISOString().split('T')[0];
+}
+
+function changeWeek(delta) {
+  const [y,m,d] = reportState.weekStart.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  dt.setDate(dt.getDate() + delta * 7);
+  reportState.weekStart = dt.toISOString().split('T')[0];
+  loadWeeklyReport();
+}
+
+async function loadWeeklyReport() {
+  document.getElementById('report-week-label').textContent = '⏳ Cargando...';
+  document.getElementById('report-summary').innerHTML = '';
+  document.getElementById('report-b1').innerHTML = '<div class="tbl-empty"><span class="spin"></span></div>';
+  document.getElementById('report-b2').innerHTML = '<div class="tbl-empty"><span class="spin"></span></div>';
+
+  try {
+    const res = await fetch(`${API_URL}/api/admin/reports/weekly?weekStart=${reportState.weekStart}`, { headers: authHeaders() });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+
+    document.getElementById('report-week-label').textContent = data.weekLabel;
+
+    // Tarjetas resumen
+    document.getElementById('report-summary').innerHTML = `
+      <div class="stat-card green">
+        <div class="stat-ico">📅</div>
+        <div class="stat-val">${data.grandTotal.appointments}</div>
+        <div class="stat-lbl">Citas esta semana</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-ico">💰</div>
+        <div class="stat-val" style="font-size:1.6rem">₡${data.grandTotal.revenue.toLocaleString('es-CR')}</div>
+        <div class="stat-lbl">Ingresos esta semana</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-ico">🐺</div>
+        <div class="stat-val">${data.barbers[0]?.totalAppointments || 0}</div>
+        <div class="stat-lbl">Citas Lobo</div>
+      </div>
+      <div class="stat-card blue" style="--info:#C9A84C">
+        <div class="stat-ico">✂️</div>
+        <div class="stat-val">${data.barbers[1]?.totalAppointments || 0}</div>
+        <div class="stat-lbl">Citas Cachetes</div>
+      </div>`;
+
+    // Render de cada barbero
+    data.barbers.forEach((b, i) => {
+      const el = document.getElementById(`report-b${i+1}`);
+      if (!b.totalAppointments) {
+        el.innerHTML = '<div class="tbl-empty" style="padding:1.5rem">Sin citas esta semana</div>';
+        return;
+      }
+      const serviceRows = Object.entries(b.services)
+        .filter(([,count]) => count > 0)
+        .map(([svcId, count]) => `
+          <tr>
+            <td>${SVCS[svcId] || svcId}</td>
+            <td style="text-align:center"><strong>${count}</strong></td>
+            <td style="text-align:right;color:var(--gold)">₡${(PRICES_NUM[svcId] * count).toLocaleString('es-CR')}</td>
+          </tr>`).join('');
+      el.innerHTML = `
+        <table class="tbl">
+          <thead><tr><th>Servicio</th><th style="text-align:center">Citas</th><th style="text-align:right">Revenue</th></tr></thead>
+          <tbody>${serviceRows}</tbody>
+          <tfoot>
+            <tr style="border-top:2px solid var(--border)">
+              <td style="font-weight:600;padding:.75rem 1rem">TOTAL</td>
+              <td style="text-align:center;font-weight:600;padding:.75rem 1rem">${b.totalAppointments}</td>
+              <td style="text-align:right;color:var(--gold);font-weight:700;padding:.75rem 1rem">₡${b.totalRevenue.toLocaleString('es-CR')}</td>
+            </tr>
+          </tfoot>
+        </table>`;
+    });
+  } catch(e) {
+    document.getElementById('report-week-label').textContent = 'Error al cargar';
+    toast('err', 'Error', 'No se pudo cargar el reporte semanal.');
+  }
+}
+
+/* ══════════════════════════════════════════════
+   GESTIÓN DE HORARIOS
+══════════════════════════════════════════════ */
+let barberSettingsData = {};
+
+async function loadScheduleView() {
+  await Promise.all([loadBarberSettings(), loadExceptions()]);
+}
+
+async function loadBarberSettings() {
+  try {
+    const res = await fetch(`${API_URL}/api/admin/barber-settings`, { headers: authHeaders() });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    data.barbers.forEach(b => {
+      barberSettingsData[b.id] = b;
+      renderBarberSettings(b);
+    });
+  } catch { toast('err','Error','No se pudo cargar la configuración.'); }
+}
+
+function renderBarberSettings(b) {
+  const el = document.getElementById(`settings-b${b.id}`);
+  el.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+      <div class="fg">
+        <label class="fl">Intervalo entre clientes</label>
+        <select class="fc-sm" id="interval-b${b.id}" style="width:100%">
+          ${[15,20,30,45,60].map(v => `<option value="${v}" ${v===b.slotInterval?'selected':''}>${v} minutos</option>`).join('')}
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">Hora de inicio</label>
+        <input type="time" class="fc-sm" id="start-b${b.id}" value="${b.startTime}" style="width:100%"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Hora de cierre</label>
+        <input type="time" class="fc-sm" id="end-b${b.id}" value="${b.endTime}" style="width:100%"/>
+      </div>
+      <button class="btn btn-g" style="margin-top:.25rem" onclick="saveBarberSettings(${b.id})">Guardar cambios</button>
+    </div>`;
+}
+
+async function saveBarberSettings(barberId) {
+  const slotInterval = parseInt(document.getElementById(`interval-b${barberId}`).value);
+  const startTime    = document.getElementById(`start-b${barberId}`).value;
+  const endTime      = document.getElementById(`end-b${barberId}`).value;
+
+  try {
+    const res = await fetch(`${API_URL}/api/admin/barber-settings`, {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify({ barberId, slotInterval, startTime, endTime }),
+    });
+    if (res.ok) toast('ok', 'Guardado', `Configuración de ${barberId===1?'Lobo':'Cachetes'} actualizada.`);
+    else toast('err','Error','No se pudo guardar.');
+  } catch { toast('err','Error','Error de conexión.'); }
+}
+
+async function loadExceptions() {
+  const tbody = document.getElementById('exceptions-tbody');
+  try {
+    const res = await fetch(`${API_URL}/api/admin/schedule`, { headers: authHeaders() });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    const exceptions = data.exceptions || [];
+
+    if (!exceptions.length) {
+      tbody.innerHTML = `<tr><td colspan="5" class="tbl-empty">Sin excepciones registradas</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = exceptions.map(ex => `
+      <tr>
+        <td>${ex.barberId === 1 ? '🐺 Lobo' : '✂️ Cachetes'}</td>
+        <td>${fmtDate(ex.date)}</td>
+        <td><span class="badge ${ex.type==='day_off'?'err':'warn'}">${ex.type==='day_off'?'Día libre':'Horario especial'}</span></td>
+        <td style="font-size:.82rem;color:var(--muted)">
+          ${ex.type==='day_off' ? 'No trabaja' : `${ex.startTime||'—'} a ${ex.endTime||'—'}${ex.note?` · ${ex.note}`:''}`}
+        </td>
+        <td><button class="btn-icon del" onclick="deleteException('${ex._id}')">🗑</button></td>
+      </tr>`).join('');
+  } catch {
+    tbody.innerHTML = `<tr><td colspan="5" class="tbl-empty">Error al cargar excepciones</td></tr>`;
+  }
+}
+
+async function deleteException(id) {
+  if (!confirm('¿Eliminar esta excepción?')) return;
+  try {
+    const res = await fetch(`${API_URL}/api/admin/schedule/${id}`, { method: 'DELETE', headers: authHeaders() });
+    if (res.ok) { toast('ok','Eliminado','Excepción removida.'); loadExceptions(); }
+    else toast('err','Error','No se pudo eliminar.');
+  } catch { toast('err','Error','Error de conexión.'); }
+}
+
+function openExceptionModal() {
+  document.getElementById('exc-form').reset();
+  document.getElementById('exc-custom-hours').style.display = 'none';
+  document.getElementById('overlay-exception').classList.add('open');
+}
+
+async function saveException() {
+  const barberId = parseInt(document.getElementById('exc-barber').value);
+  const date     = document.getElementById('exc-date').value;
+  const type     = document.getElementById('exc-type').value;
+  const note     = document.getElementById('exc-note').value.trim();
+  const startTime= document.getElementById('exc-start').value;
+  const endTime  = document.getElementById('exc-end').value;
+
+  if (!barberId || !date || !type) { toast('err','Datos incompletos','Completa todos los campos.'); return; }
+
+  const body = { barberId, date, type, note };
+  if (type === 'custom_hours') { body.startTime = startTime; body.endTime = endTime; }
+
+  try {
+    const res = await fetch(`${API_URL}/api/admin/schedule`, {
+      method: 'POST', headers: authHeaders(), body: JSON.stringify(body),
+    });
+    const d = await res.json();
+    if (res.ok) {
+      toast('ok','Excepción guardada','Se registró correctamente.');
+      document.getElementById('overlay-exception').classList.remove('open');
+      loadExceptions();
+    } else {
+      toast('err','Error', d.error || 'No se pudo guardar.');
+    }
+  } catch { toast('err','Error','Error de conexión.'); }
+}
+
+/* ══════════════════════════════════════════════
+   CONFIGURACIÓN DE IA
+══════════════════════════════════════════════ */
+const DEFAULT_PROMPT = `Eres el asistente virtual de Lobo Barber Shop, una barbería en Costa Rica. Respondes consultas de clientes por WhatsApp de manera amigable, concisa y profesional.
+
+Información del negocio:
+- Horario: Lunes a Sábado, 9:00 AM a 6:30 PM
+- Domingos: cerrado
+- Barberos: Lobo y Cachetes
+
+Servicios y precios:
+- Corte de Cabello: ₡8.000 (30 min)
+- Arreglo de Barba: ₡5.000 (30 min)
+- Corte + Barba: ₡12.000 (60 min)
+- Afeitado a Navaja: ₡6.000 (45 min)
+- Corte Niño: ₡5.000 (30 min)
+
+Para agendar una cita visita nuestro sitio web. Para consultar o modificar una cita existente necesitas tu código de cita.
+
+Responde siempre en español. Sé breve y amigable. Si te preguntan algo que no sabes, indica que pueden comunicarse directamente con la barbería.`;
+
+async function loadBotConfig() {
+  const ta = document.getElementById('prompt-textarea');
+  ta.value = 'Cargando...';
+  try {
+    const res = await fetch(`${API_URL}/api/admin/bot-config`, { headers: authHeaders() });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    ta.value = data.systemPrompt || DEFAULT_PROMPT;
+  } catch { ta.value = DEFAULT_PROMPT; toast('err','Error','No se pudo cargar el prompt.'); }
+}
+
+async function saveBotConfig() {
+  const systemPrompt = document.getElementById('prompt-textarea').value.trim();
+  if (!systemPrompt) { toast('err','Vacío','El prompt no puede estar vacío.'); return; }
+  try {
+    const res = await fetch(`${API_URL}/api/admin/bot-config`, {
+      method: 'PUT', headers: authHeaders(), body: JSON.stringify({ systemPrompt }),
+    });
+    if (res.ok) toast('ok','Guardado','El prompt fue actualizado correctamente.');
+    else toast('err','Error','No se pudo guardar el prompt.');
+  } catch { toast('err','Error','Error de conexión.'); }
+}
+
+function resetToDefaultPrompt() {
+  if (confirm('¿Restaurar el prompt al texto por defecto?')) {
+    document.getElementById('prompt-textarea').value = DEFAULT_PROMPT;
+  }
+}
 
 /* ══════════════════════════════════════════════
    TOAST
