@@ -19,31 +19,67 @@ Para agendar una cita visita nuestro sitio web. Para consultar o modificar una c
 
 Responde siempre en español. Sé breve y amigable. Si te preguntan algo que no sabes, indica que pueden comunicarse directamente con la barbería.`;
 
-function twimlResponse(message) {
-  const safe = message.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return `<?xml version="1.0" encoding="UTF-8"?><Response><Message>${safe}</Message></Response>`;
+async function sendMetaMessage(phoneNumberId, to, body) {
+  const res = await fetch(
+    `https://graph.facebook.com/v19.0/${phoneNumberId}/messages`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.META_ACCESS_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        messaging_product: 'whatsapp',
+        to,
+        type: 'text',
+        text: { body },
+      }),
+    }
+  );
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Meta API error: ${err}`);
+  }
+  return res.json();
 }
 
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    res.setHeader('Content-Type', 'text/xml');
-    return res.status(405).send(twimlResponse('Método no permitido'));
+  // GET — verificación del webhook por Meta
+  if (req.method === 'GET') {
+    const mode      = req.query['hub.mode'];
+    const token     = req.query['hub.verify_token'];
+    const challenge = req.query['hub.challenge'];
+    if (mode === 'subscribe' && token === process.env.META_VERIFY_TOKEN) {
+      return res.status(200).send(challenge);
+    }
+    return res.status(403).end();
   }
 
-  // Twilio envía form-urlencoded; Vercel lo parsea automáticamente en req.body
-  const userMessage = req.body?.Body || '';
-  const from = req.body?.From || '';
-  const cleanPhone = from.replace('whatsapp:', '');
+  if (req.method !== 'POST') return res.status(405).end();
 
-  if (!userMessage.trim()) {
-    res.setHeader('Content-Type', 'text/xml');
-    return res.status(200).send(twimlResponse('Hola! Escríbenos tu consulta.'));
-  }
+  // Confirmar recepción inmediatamente (Meta requiere respuesta < 5s)
+  res.status(200).json({ status: 'ok' });
 
   try {
+    const body = req.body;
+    if (body?.object !== 'whatsapp_business_account') return;
+
+    const value = body?.entry?.[0]?.changes?.[0]?.value;
+    if (!value?.messages?.[0]) return;
+
+    const message = value.messages[0];
+    if (message.type !== 'text') return; // solo texto por ahora
+
+    const userMessage   = message.text?.body || '';
+    const from          = message.from;              // sin "+" ej: "50688881234"
+    const cleanPhone    = `+${from}`;
+    const phoneNumberId = value.metadata?.phone_number_id;
+    const customerName  = value.contacts?.[0]?.profile?.name || '';
+
+    if (!userMessage.trim()) return;
+
     await connectDB();
 
-    // Guardar mensaje inbound
     await WaMessage.create({ phone: cleanPhone, body: userMessage, direction: 'inbound', read: false });
 
     const config = await BotConfig.findOne().sort({ updatedAt: -1 });
@@ -51,45 +87,37 @@ module.exports = async (req, res) => {
 
     const Anthropic = require('@anthropic-ai/sdk');
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    const msg = await client.messages.create({
+    const aiMsg = await client.messages.create({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 500,
       system: systemPrompt,
       messages: [{ role: 'user', content: userMessage }],
     });
-    const reply = msg.content[0].text;
+    const reply = aiMsg.content[0].text;
 
-    // Guardar mensaje outbound
+    await sendMetaMessage(phoneNumberId, from, reply);
+
     await WaMessage.create({ phone: cleanPhone, body: reply, direction: 'outbound', read: true });
 
-    // Intentar obtener nombre del cliente desde citas previas
-    const phoneDigits = cleanPhone.replace('+506 ', '').replace('+506', '');
-    const appt = await Appointment.findOne({
-      clientPhone: { $regex: phoneDigits },
-    }).sort({ createdAt: -1 });
-    const customerName = appt ? appt.clientName : '';
+    // Buscar nombre si hay citas previas con ese número
+    const digits = from.slice(-8);
+    const appt = await Appointment.findOne({ clientPhone: { $regex: digits } }).sort({ createdAt: -1 });
+    const name = customerName || appt?.clientName || '';
 
-    // Actualizar conversación (upsert)
     const updateFields = {
-      phone: cleanPhone,
       lastMessage: userMessage.slice(0, 100),
       lastMessageAt: new Date(),
       lastDirection: 'inbound',
       $inc: { unreadCount: 1 },
     };
-    if (customerName) updateFields.customerName = customerName;
+    if (name) updateFields.customerName = name;
 
     await WaConversation.findOneAndUpdate(
       { phone: cleanPhone },
       updateFields,
       { upsert: true, new: true }
     );
-
-    res.setHeader('Content-Type', 'text/xml');
-    return res.status(200).send(twimlResponse(reply));
   } catch (err) {
     console.error('WhatsApp webhook error:', err);
-    res.setHeader('Content-Type', 'text/xml');
-    return res.status(200).send(twimlResponse('Disculpa, en este momento no puedo responder. Contáctanos directamente al negocio.'));
   }
 };
