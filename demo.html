@@ -336,6 +336,26 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
 .adm-btn-o:hover{border-color:var(--red);color:var(--red)}
 .adm-cal-item{display:flex;align-items:center;gap:.75rem;padding:.65rem .85rem;background:#1C1C1C;border-radius:8px;margin-bottom:.5rem;border:1px solid #2A2A2A;cursor:pointer;transition:border-color .18s}
 .adm-cal-item:hover{border-color:var(--red)}
+
+/* ── WA CHAT DEMO ────────────────────────────── */
+.adm-wa-layout{display:grid;grid-template-columns:280px 1fr;height:calc(100vh - 120px);overflow:hidden;border:1px solid #2A2A2A;border-radius:12px;background:var(--black)}
+.adm-wa-sidebar{border-right:1px solid #2A2A2A;overflow-y:auto;display:flex;flex-direction:column}
+.adm-wa-sidebar-hd{padding:.85rem 1.1rem;border-bottom:1px solid #2A2A2A;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.adm-wa-conv{display:flex;align-items:center;gap:.65rem;padding:.75rem 1.1rem;border-bottom:1px solid rgba(42,42,42,.5);cursor:pointer;transition:background .15s;flex-shrink:0}
+.adm-wa-conv:hover,.adm-wa-conv.active{background:rgba(201,168,76,.06)}
+.adm-wa-conv.active{border-left:3px solid var(--red)}
+.adm-wa-ava{width:38px;height:38px;background:linear-gradient(135deg,var(--red-d),var(--red));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.adm-wa-chat{display:flex;flex-direction:column;height:100%}
+.adm-wa-chat-hd{padding:.85rem 1.25rem;border-bottom:1px solid #2A2A2A;display:flex;align-items:center;gap:.65rem;flex-shrink:0;background:#111}
+.adm-wa-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.55rem}
+.adm-wa-bubble{max-width:72%;padding:.55rem .9rem;border-radius:12px;font-size:.85rem;line-height:1.55;word-break:break-word}
+.adm-wa-bubble.in{background:#1C1C1C;border:1px solid #2A2A2A;border-bottom-left-radius:3px;align-self:flex-start}
+.adm-wa-bubble.out{background:rgba(201,168,76,.13);border:1px solid rgba(201,168,76,.28);border-bottom-right-radius:3px;align-self:flex-end}
+.adm-wa-btime{font-size:.64rem;color:var(--muted);margin-top:.2rem}
+.adm-wa-reply{padding:.85rem 1.1rem;border-top:1px solid #2A2A2A;display:flex;gap:.65rem;align-items:center;background:#111;flex-shrink:0}
+.adm-wa-reply input{flex:1;background:#1C1C1C;border:1px solid #2A2A2A;border-radius:8px;padding:9px 13px;color:var(--text);font-size:.85rem;font-family:'Inter',sans-serif;outline:none}
+.adm-wa-reply input:focus{border-color:var(--red)}
+.adm-wa-send{background:var(--red);color:var(--black);border:none;border-radius:8px;padding:9px 16px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;font-size:.85rem}
 </style>
 </head>
 <body>
@@ -737,6 +757,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
         <div class="adm-sb-item" onclick="admShowView('reportes',this)"><span>📈</span><span>Reportes</span></div>
         <div class="adm-sb-item" onclick="admShowView('horarios',this)"><span>🗓️</span><span>Horarios</span></div>
         <div class="adm-sb-item" onclick="admShowView('ia-config',this)"><span>🤖</span><span>Config. IA</span></div>
+        <div class="adm-sb-item" onclick="admShowView('whatsapp',this)"><span>💬</span><span>WhatsApp</span></div>
       </nav>
       <div class="adm-sb-footer">
         <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
@@ -942,6 +963,43 @@ Responde siempre en español. Sé breve y amigable.</textarea>
               <div style="display:flex;gap:.75rem">
                 <button onclick="toast('ok','Guardado (Demo)','El prompt fue actualizado correctamente.')" style="background:var(--red);color:var(--black);border:none;border-radius:8px;padding:10px 28px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">💾 Guardar Prompt</button>
                 <button onclick="toast('info','Demo','Prompt restaurado al texto por defecto.')" style="background:transparent;border:1px solid #2E2E2E;color:#F0EDE8;border-radius:8px;padding:8px 16px;font-size:.78rem;cursor:pointer;font-family:'Inter',sans-serif">↺ Restaurar default</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── WHATSAPP DEMO ── -->
+        <div class="adm-view" id="adm-view-whatsapp">
+          <div class="adm-wa-layout">
+            <!-- Lista -->
+            <div class="adm-wa-sidebar">
+              <div class="adm-wa-sidebar-hd">
+                <span style="font-weight:600;font-size:.88rem">💬 Conversaciones</span>
+                <span style="font-size:.65rem;color:var(--muted);background:#1C1C1C;border:1px solid #2A2A2A;border-radius:100px;padding:2px 8px">✓ En vivo (Demo)</span>
+              </div>
+              <div id="adm-wa-conv-list"></div>
+            </div>
+            <!-- Chat -->
+            <div class="adm-wa-chat">
+              <div id="adm-wa-empty" style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.75rem;color:var(--muted)">
+                <div style="font-size:3rem">💬</div>
+                <div style="font-weight:600">Selecciona una conversación</div>
+                <div style="font-size:.8rem">Los mensajes aparecerán aquí en tiempo real</div>
+              </div>
+              <div id="adm-wa-chat-active" style="display:none;flex-direction:column;height:100%">
+                <div class="adm-wa-chat-hd">
+                  <div class="adm-wa-ava" id="adm-wa-active-ava">👤</div>
+                  <div>
+                    <div style="font-weight:600;font-size:.88rem" id="adm-wa-active-name">—</div>
+                    <div style="font-size:.73rem;color:var(--muted)" id="adm-wa-active-phone">—</div>
+                  </div>
+                </div>
+                <div class="adm-wa-msgs" id="adm-wa-msgs"></div>
+                <div class="adm-wa-reply">
+                  <input id="adm-wa-input" placeholder="Escribe un mensaje..."
+                    onkeydown="if(event.key==='Enter')admWaSend()"/>
+                  <button class="adm-wa-send" onclick="admWaSend()">Enviar ➤</button>
+                </div>
               </div>
             </div>
           </div>
@@ -1371,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 /* ════════════════════════════════════════════
    ADMIN DEMO
 ════════════════════════════════════════════ */
-const ADM_VIEWS = { dashboard:'📊 Dashboard', citas:'📋 Todas las Citas', calendario:'📅 Vista por Día', reportes:'📈 Reportes Semanales', horarios:'🗓️ Gestión de Horarios', 'ia-config':'🤖 Configuración de IA' };
+const ADM_VIEWS = { dashboard:'📊 Dashboard', citas:'📋 Todas las Citas', calendario:'📅 Vista por Día', reportes:'📈 Reportes Semanales', horarios:'🗓️ Gestión de Horarios', 'ia-config':'🤖 Configuración de IA', 'whatsapp':'💬 WhatsApp' };
 
 const DEMO_APPTS = [
   { code:'LB3X9AB2', clientName:'Carlos Mendoza',   clientPhone:'+506 8888-1234', service:'combo',  barberId:1, date:'2026-05-08', time:'09:00', status:'confirmed' },
@@ -1441,6 +1499,7 @@ function admInit() {
 }
 
 function admShowView(name, el) {
+  if (name === 'whatsapp') admInitWa();
   document.querySelectorAll('.adm-view').forEach(v => v.classList.remove('act'));
   document.querySelectorAll('.adm-sb-item').forEach(i => i.classList.remove('act'));
   const view = document.getElementById(`adm-view-${name}`);
@@ -1511,6 +1570,106 @@ function admRenderCal() {
         </div>
       </div>`).join('');
   });
+}
+
+/* ── WHATSAPP DEMO DATA ────────────────────── */
+const DEMO_WA_CONVS = [
+  { phone: '+50688881234', name: 'Carlos Mendoza',  unread: 2, lastMsg: '¿Tienen disponibilidad mañana?', time: '10:30', lastDir: 'inbound' },
+  { phone: '+50687776543', name: 'José Rodríguez',  unread: 0, lastMsg: 'Tú: Claro, te esperamos a las 9!', time: '09:45', lastDir: 'outbound' },
+  { phone: '+50686665432', name: 'María López',     unread: 1, lastMsg: '¿Cuánto cuesta el combo?', time: 'Ayer',    lastDir: 'inbound' },
+  { phone: '+50685554321', name: 'Andrés Salazar',  unread: 0, lastMsg: 'Tú: Gracias por tu cita!', time: 'Ayer',    lastDir: 'outbound' },
+  { phone: '+50684443210', name: '+50684443210',    unread: 3, lastMsg: 'Hola buenas tardes', time: 'Lun', lastDir: 'inbound' },
+];
+
+const DEMO_WA_MESSAGES = {
+  '+50688881234': [
+    { body: 'Hola, ¿tienen disponibilidad mañana por la mañana?', dir: 'in', time: '10:22' },
+    { body: '¡Hola Carlos! Sí, tenemos disponibilidad mañana de 9:00 AM a 6:30 PM. ¿Para qué servicio te interesa?', dir: 'out', time: '10:22' },
+    { body: 'Para un corte de cabello con Lobo', dir: 'in', time: '10:28' },
+    { body: 'Perfecto! El corte de cabello tiene un costo de ₡8.000 y tarda 30 minutos. Puedes reservar en nuestro sitio web o dime el horario que prefieres.', dir: 'out', time: '10:28' },
+    { body: '¿Tienen disponibilidad mañana?', dir: 'in', time: '10:30' },
+    { body: '¿A las 10:00 AM estaría bien?', dir: 'in', time: '10:30' },
+  ],
+  '+50687776543': [
+    { body: '¿Cuánto cuesta el combo corte + barba?', dir: 'in', time: '09:30' },
+    { body: 'El combo Corte + Barba cuesta ₡12.000 y dura 60 minutos. ¡Excelente elección!', dir: 'out', time: '09:31' },
+    { body: 'Quiero agendar para el viernes', dir: 'in', time: '09:40' },
+    { body: 'Claro, te esperamos a las 9!', dir: 'out', time: '09:45' },
+  ],
+  '+50686665432': [
+    { body: 'Buenas, ¿cuánto cuesta el combo?', dir: 'in', time: 'Ayer 15:10' },
+    { body: 'El Corte + Barba tiene un precio de ₡12.000 y una duración de 60 minutos. ¿Te gustaría agendar?', dir: 'out', time: 'Ayer 15:10' },
+    { body: '¿Cuánto cuesta el combo?', dir: 'in', time: 'Ayer 16:20' },
+  ],
+};
+
+let admWaActivePhone = null;
+
+function admInitWa() {
+  const list = document.getElementById('adm-wa-conv-list');
+  if (!list) return;
+  list.innerHTML = DEMO_WA_CONVS.map(c => `
+    <div class="adm-wa-conv" onclick="admWaOpen('${c.phone}','${c.name.replace(/'/g,"\\'")}',this)">
+      <div class="adm-wa-ava">${c.name.charAt(0)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;font-size:.84rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</div>
+        <div style="font-size:.73rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.1rem">${c.lastMsg}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;flex-shrink:0">
+        <div style="font-size:.66rem;color:var(--muted)">${c.time}</div>
+        ${c.unread > 0 ? `<div style="background:var(--red);color:white;border-radius:100px;padding:1px 7px;font-size:.66rem;font-weight:700">${c.unread}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function admWaOpen(phone, name, el) {
+  admWaActivePhone = phone;
+  document.querySelectorAll('.adm-wa-conv').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  // Quitar badge
+  const badge = el.querySelector('div[style*="background:var(--red)"]');
+  if (badge) badge.remove();
+
+  document.getElementById('adm-wa-empty').style.display = 'none';
+  const active = document.getElementById('adm-wa-chat-active');
+  active.style.display = 'flex';
+  document.getElementById('adm-wa-active-name').textContent = name;
+  document.getElementById('adm-wa-active-phone').textContent = phone;
+  document.getElementById('adm-wa-active-ava').textContent = name.charAt(0);
+
+  const msgs = DEMO_WA_MESSAGES[phone] || [];
+  admWaRenderMsgs(msgs);
+}
+
+function admWaRenderMsgs(msgs) {
+  const el = document.getElementById('adm-wa-msgs');
+  el.innerHTML = msgs.map(m => `
+    <div>
+      <div class="adm-wa-bubble ${m.dir}">${m.body.replace(/\n/g,'<br>')}
+        <div class="adm-wa-btime">${m.time}${m.dir==='out'?' ✓✓':''}</div>
+      </div>
+    </div>`).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+function admWaSend() {
+  const input = document.getElementById('adm-wa-input');
+  const msg = input.value.trim();
+  if (!msg || !admWaActivePhone) return;
+
+  const msgs = DEMO_WA_MESSAGES[admWaActivePhone] || [];
+  const now = new Date().toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit' });
+  msgs.push({ body: msg, dir: 'out', time: now });
+  DEMO_WA_MESSAGES[admWaActivePhone] = msgs;
+  admWaRenderMsgs(msgs);
+  input.value = '';
+  toast('ok', 'Mensaje enviado (Demo)', msg.slice(0, 40));
+
+  // Simular respuesta automática después de 1.5s
+  setTimeout(() => {
+    msgs.push({ body: 'Este es un demo. En la versión real, el cliente recibe tu mensaje por WhatsApp.', dir: 'in', time: new Date().toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit' }) });
+    admWaRenderMsgs(msgs);
+  }, 1500);
 }
 </script>
 </body>

@@ -40,4 +40,24 @@ const BotConfig       = mongoose.models.BotConfig       || mongoose.model('BotCo
 const BarberException = mongoose.models.BarberException || mongoose.model('BarberException', barberExceptionSchema);
 const BarberSettings  = mongoose.models.BarberSettings  || mongoose.model('BarberSettings', barberSettingsSchema);
 
-module.exports = { Appointment, BotConfig, BarberException, BarberSettings };
+const waMessageSchema = new mongoose.Schema({
+  phone:     { type: String, required: true },
+  body:      { type: String, required: true },
+  direction: { type: String, enum: ['inbound', 'outbound'], required: true },
+  read:      { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now },
+});
+
+const waConversationSchema = new mongoose.Schema({
+  phone:         { type: String, required: true, unique: true },
+  customerName:  { type: String, default: '' },
+  lastMessage:   { type: String, default: '' },
+  lastMessageAt: { type: Date, default: Date.now },
+  unreadCount:   { type: Number, default: 0 },
+  lastDirection: { type: String, enum: ['inbound', 'outbound'], default: 'inbound' },
+});
+
+const WaMessage      = mongoose.models.WaMessage      || mongoose.model('WaMessage', waMessageSchema);
+const WaConversation = mongoose.models.WaConversation || mongoose.model('WaConversation', waConversationSchema);
+
+module.exports = { Appointment, BotConfig, BarberException, BarberSettings, WaMessage, WaConversation };

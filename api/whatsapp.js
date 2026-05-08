@@ -1,5 +1,5 @@
 const connectDB = require('./_lib/mongodb');
-const { BotConfig } = require('./_lib/models');
+const { BotConfig, Appointment, WaMessage, WaConversation } = require('./_lib/models');
 
 const DEFAULT_PROMPT = `Eres el asistente virtual de Lobo Barber Shop, una barbería en Costa Rica. Respondes consultas de clientes por WhatsApp de manera amigable, concisa y profesional.
 
@@ -32,6 +32,9 @@ module.exports = async (req, res) => {
 
   // Twilio envía form-urlencoded; Vercel lo parsea automáticamente en req.body
   const userMessage = req.body?.Body || '';
+  const from = req.body?.From || '';
+  const cleanPhone = from.replace('whatsapp:', '');
+
   if (!userMessage.trim()) {
     res.setHeader('Content-Type', 'text/xml');
     return res.status(200).send(twimlResponse('Hola! Escríbenos tu consulta.'));
@@ -39,6 +42,10 @@ module.exports = async (req, res) => {
 
   try {
     await connectDB();
+
+    // Guardar mensaje inbound
+    await WaMessage.create({ phone: cleanPhone, body: userMessage, direction: 'inbound', read: false });
+
     const config = await BotConfig.findOne().sort({ updatedAt: -1 });
     const systemPrompt = config ? config.systemPrompt : DEFAULT_PROMPT;
 
@@ -51,6 +58,32 @@ module.exports = async (req, res) => {
       messages: [{ role: 'user', content: userMessage }],
     });
     const reply = msg.content[0].text;
+
+    // Guardar mensaje outbound
+    await WaMessage.create({ phone: cleanPhone, body: reply, direction: 'outbound', read: true });
+
+    // Intentar obtener nombre del cliente desde citas previas
+    const phoneDigits = cleanPhone.replace('+506 ', '').replace('+506', '');
+    const appt = await Appointment.findOne({
+      clientPhone: { $regex: phoneDigits },
+    }).sort({ createdAt: -1 });
+    const customerName = appt ? appt.clientName : '';
+
+    // Actualizar conversación (upsert)
+    const updateFields = {
+      phone: cleanPhone,
+      lastMessage: userMessage.slice(0, 100),
+      lastMessageAt: new Date(),
+      lastDirection: 'inbound',
+      $inc: { unreadCount: 1 },
+    };
+    if (customerName) updateFields.customerName = customerName;
+
+    await WaConversation.findOneAndUpdate(
+      { phone: cleanPhone },
+      updateFields,
+      { upsert: true, new: true }
+    );
 
     res.setHeader('Content-Type', 'text/xml');
     return res.status(200).send(twimlResponse(reply));
