@@ -45,7 +45,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 @keyframes fadeUp{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
 
 /* ══ DEMO BANNER ═════════════════════════════ */
-.demo-banner{position:fixed;bottom:0;left:0;right:0;background:var(--red);color:white;text-align:center;padding:.45rem 1rem;font-size:.75rem;font-weight:600;z-index:400;letter-spacing:.5px}
+.demo-banner{position:fixed;bottom:0;left:0;right:0;background:var(--red);color:white;text-align:center;padding:.45rem 1rem;font-size:.75rem;font-weight:600;z-index:400;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:.5rem}
 
 /* ══ NAVBAR ══════════════════════════════════ */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);height:68px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between}
@@ -298,6 +298,44 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
   #toasts{left:.75rem;right:.75rem;bottom:2.5rem}
   .toast{min-width:unset;max-width:100%}
 }
+
+/* ══ ADMIN PANEL DEMO ════════════════════════ */
+.adm-layout{display:flex;min-height:100vh;background:var(--black)}
+.adm-sidebar{width:220px;flex-shrink:0;background:#111111;border-right:1px solid #2A2A2A;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;padding-bottom:32px}
+.adm-sb-logo{padding:1.5rem 1.25rem;border-bottom:1px solid #2A2A2A}
+.adm-sb-logo-txt{font-family:'Oswald',sans-serif;font-size:1.3rem;letter-spacing:2px;font-weight:700}
+.adm-sb-logo-txt span{color:var(--red)}
+.adm-sb-logo-sub{font-size:.68rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:.15rem}
+.adm-sb-nav{padding:1rem 0;flex:1;overflow-y:auto}
+.adm-sb-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.25rem;font-size:.84rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;border-left:2px solid transparent}
+.adm-sb-item:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.adm-sb-item.act{color:var(--red);border-left-color:var(--red);background:rgba(201,168,76,.06)}
+.adm-sb-footer{padding:1rem 1.25rem;border-top:1px solid #2A2A2A;margin-top:auto}
+.adm-main{flex:1;margin-left:220px;display:flex;flex-direction:column;min-height:100vh}
+.adm-topbar{height:60px;background:#111111;border-bottom:1px solid #2A2A2A;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:sticky;top:0;z-index:40}
+.adm-topbar-title{font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;letter-spacing:1px}
+.adm-content{padding:2rem;flex:1}
+.adm-view{display:none}.adm-view.act{display:block;animation:fi .25s ease}
+.adm-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+.adm-stat-card{background:#161616;border:1px solid #2A2A2A;border-radius:12px;padding:1.25rem 1.4rem;position:relative;overflow:hidden}
+.adm-stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.adm-stat-card.blue::after{background:linear-gradient(to right,transparent,#2196F3,transparent)}
+.adm-stat-card.green::after{background:linear-gradient(to right,transparent,#4CAF50,transparent)}
+.adm-stat-card.gold::after{background:linear-gradient(to right,transparent,var(--red),transparent)}
+.adm-stat-card.red::after{background:linear-gradient(to right,transparent,#E53935,transparent)}
+.adm-stat-val{font-family:'Oswald',sans-serif;font-size:2.4rem;line-height:1;margin-bottom:.2rem}
+.adm-stat-lbl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.adm-table-wrap{background:#161616;border:1px solid #2A2A2A;border-radius:12px;overflow:hidden;margin-bottom:1rem}
+.adm-table-head{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.4rem;border-bottom:1px solid #2A2A2A}
+.adm-tbl{width:100%;border-collapse:collapse}
+.adm-tbl th{padding:.75rem 1rem;text-align:left;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #2A2A2A}
+.adm-tbl td{padding:.8rem 1rem;font-size:.85rem;border-bottom:1px solid rgba(42,42,42,.5);vertical-align:middle}
+.adm-tbl tr:last-child td{border-bottom:none}
+.adm-tbl tr:hover td{background:rgba(255,255,255,.02)}
+.adm-btn-o{background:transparent;color:var(--text);border:1px solid #333;border-radius:6px;padding:6px 14px;font-size:.78rem;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:all .2s}
+.adm-btn-o:hover{border-color:var(--red);color:var(--red)}
+.adm-cal-item{display:flex;align-items:center;gap:.75rem;padding:.65rem .85rem;background:#1C1C1C;border-radius:8px;margin-bottom:.5rem;border:1px solid #2A2A2A;cursor:pointer;transition:border-color .18s}
+.adm-cal-item:hover{border-color:var(--red)}
 </style>
 </head>
 <body>
@@ -318,11 +356,20 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
 </div>
 
 <!-- ══ DEMO BANNER ════════════════════════════════ -->
-<div class="demo-banner">✦ DEMO VISUAL — Lobo Barber Shop · Vista previa sin base de datos ✦</div>
+<div class="demo-banner">
+  <span>✦ DEMO VISUAL — Sin base de datos</span>
+  <div style="display:flex;gap:.5rem;margin-left:1rem">
+    <button onclick="switchView('client')" id="btn-client-view" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:white;padding:3px 12px;border-radius:4px;font-size:.72rem;font-weight:600;cursor:pointer">👤 Cliente</button>
+    <button onclick="switchView('admin')" id="btn-admin-view" style="background:transparent;border:1px solid rgba(255,255,255,.4);color:rgba(255,255,255,.7);padding:3px 12px;border-radius:4px;font-size:.72rem;font-weight:600;cursor:pointer">⚙️ Admin Panel</button>
+  </div>
+</div>
+
+<div id="client-view">
 
 <!-- ══ NAVBAR ═════════════════════════════════════ -->
 <nav class="nav">
   <a href="#inicio" class="nav-logo" onclick="goTo('#inicio')">
+    <img src="public/img/lobo-logo.jpg" alt="Lobo Barber" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0"/>
     <span class="nav-logo-txt">LOBO<span>BARBER</span></span>
   </a>
   <div class="nav-links">
@@ -338,6 +385,9 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
 <section class="hero" id="inicio">
   <div class="hero-bg" aria-hidden="true">LOBO</div>
   <span class="hero-badge">✦ Barbería Premium ✦</span>
+  <div class="hero-logo">
+    <img src="public/img/lobo-logo.jpg" alt="Lobo Barber Shop" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>
+  </div>
 
   <h1>LOBO<br><span>BARBER</span><br>SHOP</h1>
   <p class="hero-sub">Donde el estilo se convierte en arte</p>
@@ -663,6 +713,244 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
 
 <!-- ══ TOASTS ═════════════════════════════════════ -->
 <div id="toasts"></div>
+
+</div><!-- /#client-view -->
+
+<!-- ══ ADMIN VIEW ═════════════════════════════════ -->
+<div id="admin-view" style="display:none;min-height:100vh">
+  <div class="adm-layout">
+    <!-- SIDEBAR -->
+    <aside class="adm-sidebar">
+      <div class="adm-sb-logo">
+        <div style="display:flex;align-items:center;gap:.6rem">
+          <img src="public/img/lobo-logo.jpg" alt="" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0"/>
+          <div>
+            <div class="adm-sb-logo-txt">LOBO<span>BARBER</span></div>
+            <div class="adm-sb-logo-sub">Admin Panel</div>
+          </div>
+        </div>
+      </div>
+      <nav class="adm-sb-nav">
+        <div class="adm-sb-item act" onclick="admShowView('dashboard',this)"><span>📊</span><span>Dashboard</span></div>
+        <div class="adm-sb-item" onclick="admShowView('citas',this)"><span>📋</span><span>Todas las Citas</span></div>
+        <div class="adm-sb-item" onclick="admShowView('calendario',this)"><span>📅</span><span>Vista por Día</span></div>
+        <div class="adm-sb-item" onclick="admShowView('reportes',this)"><span>📈</span><span>Reportes</span></div>
+        <div class="adm-sb-item" onclick="admShowView('horarios',this)"><span>🗓️</span><span>Horarios</span></div>
+        <div class="adm-sb-item" onclick="admShowView('ia-config',this)"><span>🤖</span><span>Config. IA</span></div>
+      </nav>
+      <div class="adm-sb-footer">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+          <div style="width:30px;height:30px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem">👤</div>
+          <div><div style="font-size:.8rem;font-weight:500">Administrador</div><div style="font-size:.68rem;color:var(--muted)">Lobo Barber Shop</div></div>
+        </div>
+        <button onclick="switchView('client')" style="width:100%;background:transparent;border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:7px;font-size:.78rem;cursor:pointer;font-family:'Inter',sans-serif">← Volver al sitio</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="adm-main">
+      <div class="adm-topbar">
+        <div class="adm-topbar-title" id="adm-view-title">📊 Dashboard</div>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div style="font-size:.75rem;color:var(--muted)">🕐 <span id="adm-clock">--:--</span></div>
+          <span style="background:rgba(201,168,76,.15);color:var(--red);border:1px solid rgba(201,168,76,.3);border-radius:6px;padding:4px 10px;font-size:.72rem;font-weight:600">✦ DEMO</span>
+        </div>
+      </div>
+
+      <div class="adm-content">
+
+        <!-- ── DASHBOARD ── -->
+        <div class="adm-view act" id="adm-view-dashboard">
+          <div class="adm-stats-grid">
+            <div class="adm-stat-card blue"><div style="font-size:1.4rem;margin-bottom:.6rem">📅</div><div class="adm-stat-val" style="color:#2196F3">7</div><div class="adm-stat-lbl">Citas Hoy</div></div>
+            <div class="adm-stat-card green"><div style="font-size:1.4rem;margin-bottom:.6rem">✅</div><div class="adm-stat-val" style="color:#4CAF50">142</div><div class="adm-stat-lbl">Confirmadas</div></div>
+            <div class="adm-stat-card gold"><div style="font-size:1.4rem;margin-bottom:.6rem">⏳</div><div class="adm-stat-val" style="color:var(--red)">23</div><div class="adm-stat-lbl">Próximas 7 días</div></div>
+            <div class="adm-stat-card red"><div style="font-size:1.4rem;margin-bottom:.6rem">❌</div><div class="adm-stat-val" style="color:#E53935">8</div><div class="adm-stat-lbl">Canceladas</div></div>
+          </div>
+          <div class="adm-table-wrap">
+            <div class="adm-table-head">
+              <div style="font-weight:600;font-size:.95rem">📅 Citas de Hoy <span style="background:var(--red);color:var(--black);border-radius:100px;padding:2px 9px;font-size:.72rem;font-weight:700">7</span></div>
+            </div>
+            <table class="adm-tbl">
+              <thead><tr><th>Hora</th><th>Cliente</th><th>Servicio</th><th>Barbero</th><th>Estado</th></tr></thead>
+              <tbody id="adm-today-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── TODAS LAS CITAS ── -->
+        <div class="adm-view" id="adm-view-citas">
+          <div class="adm-table-wrap">
+            <div class="adm-table-head">
+              <div style="font-weight:600;font-size:.95rem">📋 Citas <span style="background:var(--red);color:var(--black);border-radius:100px;padding:2px 9px;font-size:.72rem;font-weight:700">12</span></div>
+            </div>
+            <table class="adm-tbl">
+              <thead><tr><th>Código</th><th>Cliente</th><th>Servicio</th><th>Barbero</th><th>Fecha</th><th>Hora</th><th>Estado</th></tr></thead>
+              <tbody id="adm-all-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── CALENDARIO ── -->
+        <div class="adm-view" id="adm-view-calendario">
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem">
+            <button class="adm-btn-o" onclick="admChangeDay(-1)">← Anterior</button>
+            <div style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;flex:1;text-align:center" id="adm-cal-title">—</div>
+            <button class="adm-btn-o" onclick="admChangeDay(1)">Siguiente →</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+            <div class="adm-table-wrap" style="border-radius:12px;padding:1.25rem 1.4rem">
+              <div style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;color:var(--red);margin-bottom:1rem">🐺 Lobo</div>
+              <div id="adm-cal-b1"></div>
+            </div>
+            <div class="adm-table-wrap" style="border-radius:12px;padding:1.25rem 1.4rem">
+              <div style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;color:var(--red);margin-bottom:1rem">✂️ Cachetes</div>
+              <div id="adm-cal-b2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── REPORTES ── -->
+        <div class="adm-view" id="adm-view-reportes">
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem">
+            <button class="adm-btn-o">← Semana anterior</button>
+            <div style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;flex:1;text-align:center" id="adm-report-title">5 – 11 Mayo 2026</div>
+            <button class="adm-btn-o">Semana siguiente →</button>
+          </div>
+          <div class="adm-stats-grid" style="margin-bottom:1.5rem">
+            <div class="adm-stat-card green"><div style="font-size:1.4rem;margin-bottom:.6rem">📅</div><div class="adm-stat-val" style="color:#4CAF50">45</div><div class="adm-stat-lbl">Citas esta semana</div></div>
+            <div class="adm-stat-card gold"><div style="font-size:1.4rem;margin-bottom:.6rem">💰</div><div class="adm-stat-val" style="color:var(--red);font-size:1.6rem">₡335K</div><div class="adm-stat-lbl">Ingresos esta semana</div></div>
+            <div class="adm-stat-card blue"><div style="font-size:1.4rem;margin-bottom:.6rem">🐺</div><div class="adm-stat-val" style="color:#2196F3">25</div><div class="adm-stat-lbl">Citas Lobo</div></div>
+            <div class="adm-stat-card blue"><div style="font-size:1.4rem;margin-bottom:.6rem">✂️</div><div class="adm-stat-val" style="color:#2196F3">20</div><div class="adm-stat-lbl">Citas Cachetes</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+            <div class="adm-table-wrap">
+              <div class="adm-table-head"><div style="font-weight:600">🐺 Lobo</div></div>
+              <table class="adm-tbl">
+                <thead><tr><th>Servicio</th><th style="text-align:center">Citas</th><th style="text-align:right">Revenue</th></tr></thead>
+                <tbody>
+                  <tr><td>Corte de Cabello</td><td style="text-align:center">10</td><td style="text-align:right;color:var(--red)">₡80.000</td></tr>
+                  <tr><td>Corte + Barba</td><td style="text-align:center">7</td><td style="text-align:right;color:var(--red)">₡84.000</td></tr>
+                  <tr><td>Arreglo de Barba</td><td style="text-align:center">5</td><td style="text-align:right;color:var(--red)">₡25.000</td></tr>
+                  <tr><td>Afeitado a Navaja</td><td style="text-align:center">2</td><td style="text-align:right;color:var(--red)">₡12.000</td></tr>
+                  <tr><td>Corte Niño</td><td style="text-align:center">1</td><td style="text-align:right;color:var(--red)">₡5.000</td></tr>
+                  <tr style="border-top:2px solid var(--border2)"><td style="font-weight:700;padding:.75rem 1rem">TOTAL</td><td style="text-align:center;font-weight:700;padding:.75rem 1rem">25</td><td style="text-align:right;color:var(--red);font-weight:700;padding:.75rem 1rem">₡206.000</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="adm-table-wrap">
+              <div class="adm-table-head"><div style="font-weight:600">✂️ Cachetes</div></div>
+              <table class="adm-tbl">
+                <thead><tr><th>Servicio</th><th style="text-align:center">Citas</th><th style="text-align:right">Revenue</th></tr></thead>
+                <tbody>
+                  <tr><td>Corte de Cabello</td><td style="text-align:center">8</td><td style="text-align:right;color:var(--red)">₡64.000</td></tr>
+                  <tr><td>Corte + Barba</td><td style="text-align:center">6</td><td style="text-align:right;color:var(--red)">₡72.000</td></tr>
+                  <tr><td>Arreglo de Barba</td><td style="text-align:center">4</td><td style="text-align:right;color:var(--red)">₡20.000</td></tr>
+                  <tr><td>Afeitado a Navaja</td><td style="text-align:center">1</td><td style="text-align:right;color:var(--red)">₡6.000</td></tr>
+                  <tr><td>Corte Niño</td><td style="text-align:center">1</td><td style="text-align:right;color:var(--red)">₡5.000</td></tr>
+                  <tr style="border-top:2px solid var(--border2)"><td style="font-weight:700;padding:.75rem 1rem">TOTAL</td><td style="text-align:center;font-weight:700;padding:.75rem 1rem">20</td><td style="text-align:right;color:var(--red);font-weight:700;padding:.75rem 1rem">₡167.000</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── HORARIOS ── -->
+        <div class="adm-view" id="adm-view-horarios">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem">
+            <div class="adm-table-wrap">
+              <div class="adm-table-head"><div style="font-weight:600">🐺 Lobo — Configuración</div></div>
+              <div style="padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:.75rem">
+                <div><label style="font-size:.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:.35rem">Intervalo entre clientes</label>
+                  <select style="width:100%;background:#1A1A1A;border:1px solid #222;border-radius:7px;padding:8px 12px;color:#F0EDE8;font-size:.85rem;font-family:'Inter',sans-serif">
+                    <option>30 minutos</option><option>15 minutos</option><option>20 minutos</option><option selected>30 minutos</option><option>45 minutos</option><option>60 minutos</option>
+                  </select></div>
+                <div><label style="font-size:.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:.35rem">Hora de inicio</label>
+                  <input type="time" value="09:00" style="width:100%;background:#1A1A1A;border:1px solid #222;border-radius:7px;padding:8px 12px;color:#F0EDE8;font-size:.85rem;font-family:'Inter',sans-serif"/></div>
+                <div><label style="font-size:.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:.35rem">Hora de cierre</label>
+                  <input type="time" value="18:30" style="width:100%;background:#1A1A1A;border:1px solid #222;border-radius:7px;padding:8px 12px;color:#F0EDE8;font-size:.85rem;font-family:'Inter',sans-serif"/></div>
+                <button onclick="toast('ok','Guardado (Demo)','Configuración de Lobo actualizada.')" style="background:var(--red);color:var(--black);border:none;border-radius:8px;padding:10px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Guardar cambios</button>
+              </div>
+            </div>
+            <div class="adm-table-wrap">
+              <div class="adm-table-head"><div style="font-weight:600">✂️ Cachetes — Configuración</div></div>
+              <div style="padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:.75rem">
+                <div><label style="font-size:.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:.35rem">Intervalo entre clientes</label>
+                  <select style="width:100%;background:#1A1A1A;border:1px solid #222;border-radius:7px;padding:8px 12px;color:#F0EDE8;font-size:.85rem;font-family:'Inter',sans-serif">
+                    <option selected>30 minutos</option><option>15 minutos</option><option>20 minutos</option><option>45 minutos</option><option>60 minutos</option>
+                  </select></div>
+                <div><label style="font-size:.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:.35rem">Hora de inicio</label>
+                  <input type="time" value="09:00" style="width:100%;background:#1A1A1A;border:1px solid #222;border-radius:7px;padding:8px 12px;color:#F0EDE8;font-size:.85rem;font-family:'Inter',sans-serif"/></div>
+                <div><label style="font-size:.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:.35rem">Hora de cierre</label>
+                  <input type="time" value="18:30" style="width:100%;background:#1A1A1A;border:1px solid #222;border-radius:7px;padding:8px 12px;color:#F0EDE8;font-size:.85rem;font-family:'Inter',sans-serif"/></div>
+                <button onclick="toast('ok','Guardado (Demo)','Configuración de Cachetes actualizada.')" style="background:var(--red);color:var(--black);border:none;border-radius:8px;padding:10px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Guardar cambios</button>
+              </div>
+            </div>
+          </div>
+          <div class="adm-table-wrap">
+            <div class="adm-table-head">
+              <div style="font-weight:600">🚫 Excepciones de Horario</div>
+              <button onclick="toast('info','Demo','En la versión real puedes agregar días libres y horarios especiales.')" style="background:var(--red);color:var(--black);border:none;border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">+ Agregar</button>
+            </div>
+            <table class="adm-tbl">
+              <thead><tr><th>Barbero</th><th>Fecha</th><th>Tipo</th><th>Detalle</th><th></th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>🐺 Lobo</td>
+                  <td>Sáb 10 Mayo 2026</td>
+                  <td><span style="background:rgba(229,57,53,.12);color:#E53935;border:1px solid rgba(229,57,53,.25);display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600">Día libre</span></td>
+                  <td style="font-size:.82rem;color:var(--muted)">No trabaja</td>
+                  <td><button style="width:28px;height:28px;border-radius:6px;border:1px solid #2E2E2E;background:transparent;color:#E53935;cursor:pointer;font-size:.85rem">🗑</button></td>
+                </tr>
+                <tr>
+                  <td>✂️ Cachetes</td>
+                  <td>Vie 16 Mayo 2026</td>
+                  <td><span style="background:rgba(255,152,0,.12);color:#FF9800;border:1px solid rgba(255,152,0,.25);display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600">Horario especial</span></td>
+                  <td style="font-size:.82rem;color:var(--muted)">09:00 a 14:00</td>
+                  <td><button style="width:28px;height:28px;border-radius:6px;border:1px solid #2E2E2E;background:transparent;color:#E53935;cursor:pointer;font-size:.85rem">🗑</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── CONFIG IA ── -->
+        <div class="adm-view" id="adm-view-ia-config">
+          <div class="adm-table-wrap" style="max-width:800px">
+            <div class="adm-table-head">
+              <div style="font-weight:600">🤖 Prompt del Asistente de WhatsApp</div>
+            </div>
+            <div style="padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:1rem">
+              <p style="font-size:.83rem;color:var(--muted);line-height:1.6">Este es el texto que guía las respuestas de la IA cuando un cliente escribe por WhatsApp. Puedes personalizarlo con información del negocio, instrucciones de tono, o políticas.</p>
+              <textarea rows="14" style="width:100%;background:#1A1A1A;border:1px solid #222;border-radius:8px;padding:12px 15px;color:#F0EDE8;font-size:.84rem;font-family:monospace;line-height:1.6;resize:vertical;outline:none">Eres el asistente virtual de Lobo Barber Shop, una barbería en Costa Rica. Respondes consultas de clientes por WhatsApp de manera amigable, concisa y profesional.
+
+Información del negocio:
+- Horario: Lunes a Sábado, 9:00 AM a 6:30 PM
+- Domingos: cerrado
+- Barberos: Lobo y Cachetes
+
+Servicios y precios:
+- Corte de Cabello: ₡8.000 (30 min)
+- Arreglo de Barba: ₡5.000 (30 min)
+- Corte + Barba: ₡12.000 (60 min)
+- Afeitado a Navaja: ₡6.000 (45 min)
+- Corte Niño: ₡5.000 (30 min)
+
+Para agendar una cita visita nuestro sitio web. Para consultar o modificar una cita existente necesitas tu código de cita.
+
+Responde siempre en español. Sé breve y amigable.</textarea>
+              <div style="display:flex;gap:.75rem">
+                <button onclick="toast('ok','Guardado (Demo)','El prompt fue actualizado correctamente.')" style="background:var(--red);color:var(--black);border:none;border-radius:8px;padding:10px 28px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">💾 Guardar Prompt</button>
+                <button onclick="toast('info','Demo','Prompt restaurado al texto por defecto.')" style="background:transparent;border:1px solid #2E2E2E;color:#F0EDE8;border-radius:8px;padding:8px 16px;font-size:.78rem;cursor:pointer;font-family:'Inter',sans-serif">↺ Restaurar default</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /adm-content -->
+    </main>
+  </div><!-- /adm-layout -->
+</div><!-- /admin-view -->
 
 <script>
 /* ════════════════════════════════════════════
@@ -1079,6 +1367,151 @@ document.addEventListener('DOMContentLoaded', ()=>{
     di.max=max.toISOString().split('T')[0];
   }
 });
+
+/* ════════════════════════════════════════════
+   ADMIN DEMO
+════════════════════════════════════════════ */
+const ADM_VIEWS = { dashboard:'📊 Dashboard', citas:'📋 Todas las Citas', calendario:'📅 Vista por Día', reportes:'📈 Reportes Semanales', horarios:'🗓️ Gestión de Horarios', 'ia-config':'🤖 Configuración de IA' };
+
+const DEMO_APPTS = [
+  { code:'LB3X9AB2', clientName:'Carlos Mendoza',   clientPhone:'+506 8888-1234', service:'combo',  barberId:1, date:'2026-05-08', time:'09:00', status:'confirmed' },
+  { code:'WQ7MNPK4', clientName:'José Rodríguez',   clientPhone:'+506 8765-4321', service:'corte',  barberId:2, date:'2026-05-08', time:'09:30', status:'confirmed' },
+  { code:'TP2QRZJ8', clientName:'Andrés Salazar',   clientPhone:'+506 8555-9876', service:'barba',  barberId:1, date:'2026-05-08', time:'10:00', status:'confirmed' },
+  { code:'XK5BHWD3', clientName:'Luis González',    clientPhone:'+506 8444-5678', service:'navaja', barberId:2, date:'2026-05-08', time:'10:30', status:'confirmed' },
+  { code:'NF8CVMZ1', clientName:'Diego Morales',    clientPhone:'+506 8333-2109', service:'nino',   barberId:1, date:'2026-05-08', time:'11:00', status:'confirmed' },
+  { code:'RJ6PQXY9', clientName:'Marco Jiménez',    clientPhone:'+506 8222-3456', service:'combo',  barberId:2, date:'2026-05-08', time:'11:30', status:'confirmed' },
+  { code:'BH4TGWS7', clientName:'Fabio Arias',      clientPhone:'+506 8111-7890', service:'corte',  barberId:1, date:'2026-05-08', time:'14:00', status:'confirmed' },
+  { code:'ZL9EKRQM', clientName:'Pedro Vargas',     clientPhone:'+506 8999-0123', service:'corte',  barberId:1, date:'2026-05-07', time:'10:00', status:'cancelled' },
+  { code:'YC2JNVFP', clientName:'Esteban López',    clientPhone:'+506 8888-3456', service:'barba',  barberId:2, date:'2026-05-09', time:'09:00', status:'confirmed' },
+  { code:'UK7DXMBT', clientName:'Alejandro Chaves', clientPhone:'+506 8777-6789', service:'combo',  barberId:1, date:'2026-05-09', time:'09:30', status:'confirmed' },
+  { code:'SG3RWPHY', clientName:'Sebastián Torres', clientPhone:'+506 8666-9012', service:'navaja', barberId:2, date:'2026-05-10', time:'11:00', status:'confirmed' },
+  { code:'MQ5ZCKLV', clientName:'Raúl Castillo',    clientPhone:'+506 8555-2345', service:'nino',   barberId:1, date:'2026-05-10', time:'15:00', status:'confirmed' },
+];
+
+const ADM_SVC_NAMES = { corte:'Corte de Cabello', barba:'Arreglo de Barba', combo:'Corte + Barba', navaja:'Afeitado a Navaja', nino:'Corte Niño' };
+const ADM_DAYS   = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const ADM_MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+const admCalState = { date: '2026-05-08' };
+
+function fmtAdmDate(d) {
+  const [y,m,dd] = d.split('-').map(Number);
+  const dt = new Date(y,m-1,dd);
+  return `${ADM_DAYS[dt.getDay()]} ${dd} ${ADM_MONTHS[m-1]} ${y}`;
+}
+
+function switchView(view) {
+  const client = document.getElementById('client-view');
+  const admin  = document.getElementById('admin-view');
+  const btnC   = document.getElementById('btn-client-view');
+  const btnA   = document.getElementById('btn-admin-view');
+  if (view === 'admin') {
+    client.style.display = 'none';
+    admin.style.display  = 'block';
+    document.body.style.paddingBottom = '32px';
+    btnC.style.background = 'transparent';
+    btnC.style.color = 'rgba(255,255,255,.7)';
+    btnA.style.background = 'rgba(255,255,255,.2)';
+    btnA.style.color = 'white';
+    admInit();
+  } else {
+    admin.style.display  = 'none';
+    client.style.display = 'block';
+    document.body.style.paddingBottom = '32px';
+    btnA.style.background = 'transparent';
+    btnA.style.color = 'rgba(255,255,255,.7)';
+    btnC.style.background = 'rgba(255,255,255,.2)';
+    btnC.style.color = 'white';
+  }
+}
+
+let admInitDone = false;
+function admInit() {
+  if (admInitDone) return;
+  admInitDone = true;
+  const tick = () => {
+    const el = document.getElementById('adm-clock');
+    if (el) el.textContent = new Date().toLocaleTimeString('es-CR', { hour:'2-digit', minute:'2-digit' });
+  };
+  tick();
+  setInterval(tick, 30000);
+  admRenderToday();
+  admRenderAll();
+  admRenderCal();
+}
+
+function admShowView(name, el) {
+  document.querySelectorAll('.adm-view').forEach(v => v.classList.remove('act'));
+  document.querySelectorAll('.adm-sb-item').forEach(i => i.classList.remove('act'));
+  const view = document.getElementById(`adm-view-${name}`);
+  if (view) view.classList.add('act');
+  if (el) el.classList.add('act');
+  const title = document.getElementById('adm-view-title');
+  if (title) title.textContent = ADM_VIEWS[name] || name;
+  if (name === 'calendario') admRenderCal();
+}
+
+function admRenderToday() {
+  const appts = DEMO_APPTS.filter(a => a.date === '2026-05-08' && a.status === 'confirmed');
+  const tbody = document.getElementById('adm-today-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = appts.sort((a,b) => a.time.localeCompare(b.time)).map(a => `
+    <tr>
+      <td><strong style="color:var(--red)">${a.time}</strong></td>
+      <td>${a.clientName}</td>
+      <td>${ADM_SVC_NAMES[a.service] || a.service}</td>
+      <td><span style="background:rgba(201,168,76,.12);color:var(--red);border:1px solid rgba(201,168,76,.25);display:inline-flex;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600">${a.barberId===1?'Lobo':'Cachetes'}</span></td>
+      <td><span style="background:rgba(76,175,80,.12);color:#4CAF50;border:1px solid rgba(76,175,80,.25);display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600">✅ Confirmada</span></td>
+    </tr>`).join('');
+}
+
+function admRenderAll() {
+  const tbody = document.getElementById('adm-all-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = DEMO_APPTS.map(a => `
+    <tr>
+      <td style="font-family:monospace;letter-spacing:1.5px;color:var(--red);font-size:.82rem">${a.code}</td>
+      <td><div style="font-weight:500">${a.clientName}</div><div style="font-size:.75rem;color:var(--muted)">${a.clientPhone}</div></td>
+      <td>${ADM_SVC_NAMES[a.service] || a.service}</td>
+      <td>${a.barberId===1?'Lobo':'Cachetes'}</td>
+      <td>${a.date}</td>
+      <td><strong style="color:var(--red)">${a.time}</strong></td>
+      <td>${a.status==='confirmed'
+        ? '<span style="background:rgba(76,175,80,.12);color:#4CAF50;border:1px solid rgba(76,175,80,.25);display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600">✅ Confirmada</span>'
+        : '<span style="background:rgba(229,57,53,.12);color:#E53935;border:1px solid rgba(229,57,53,.25);display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600">❌ Cancelada</span>'
+      }</td>
+    </tr>`).join('');
+}
+
+function admChangeDay(delta) {
+  const [y,m,d] = admCalState.date.split('-').map(Number);
+  const dt = new Date(y,m-1,d);
+  dt.setDate(dt.getDate() + delta);
+  admCalState.date = dt.toISOString().split('T')[0];
+  admRenderCal();
+}
+
+function admRenderCal() {
+  const title = document.getElementById('adm-cal-title');
+  if (title) title.textContent = fmtAdmDate(admCalState.date);
+  [1,2].forEach(bid => {
+    const el = document.getElementById(`adm-cal-b${bid}`);
+    if (!el) return;
+    const appts = DEMO_APPTS.filter(a => a.barberId===bid && a.date===admCalState.date && a.status==='confirmed');
+    if (!appts.length) {
+      el.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:.85rem">✨ Sin citas este día</div>';
+      return;
+    }
+    el.innerHTML = appts.sort((a,b) => a.time.localeCompare(b.time)).map(a => `
+      <div class="adm-cal-item">
+        <div style="font-family:Oswald,sans-serif;font-size:1.05rem;color:var(--red);width:42px;flex-shrink:0;letter-spacing:1px">${a.time}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:500;font-size:.85rem">${a.clientName}</div>
+          <div style="font-size:.75rem;color:var(--muted)">${ADM_SVC_NAMES[a.service]||a.service}</div>
+        </div>
+      </div>`).join('');
+  });
+}
 </script>
 </body>
 </html>
