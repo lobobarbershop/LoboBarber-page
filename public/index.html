@@ -84,37 +84,8 @@
       <div class="red-line"></div>
       <p class="section-desc" style="margin-top:.75rem">Cada servicio es una experiencia. Trabajo artesanal con los mejores productos.</p>
     </div>
-    <div class="services-grid">
-      <div class="service-card">
-        <span class="service-icon">💈</span>
-        <div class="service-name">Corte de Cabello</div>
-        <div class="service-duration">⏱ 30 min</div>
-        <div class="service-price">₡8.000</div>
-      </div>
-      <div class="service-card">
-        <span class="service-icon">🪒</span>
-        <div class="service-name">Arreglo de Barba</div>
-        <div class="service-duration">⏱ 30 min</div>
-        <div class="service-price">₡5.000</div>
-      </div>
-      <div class="service-card">
-        <span class="service-icon">⭐</span>
-        <div class="service-name">Corte + Barba</div>
-        <div class="service-duration">⏱ 60 min</div>
-        <div class="service-price">₡12.000</div>
-      </div>
-      <div class="service-card">
-        <span class="service-icon">✨</span>
-        <div class="service-name">Afeitado a Navaja</div>
-        <div class="service-duration">⏱ 45 min</div>
-        <div class="service-price">₡6.000</div>
-      </div>
-      <div class="service-card">
-        <span class="service-icon">🧒</span>
-        <div class="service-name">Corte Niño</div>
-        <div class="service-duration">⏱ 30 min</div>
-        <div class="service-price">₡5.000</div>
-      </div>
+    <div class="services-grid" id="services-grid">
+      <!-- Renderizado dinámicamente por app.js -->
     </div>
   </div>
 </section>
@@ -127,27 +98,8 @@
       <h2 class="section-title">Nuestros <span>Barberos</span></h2>
       <div class="red-line"></div>
     </div>
-    <div class="barbers-grid">
-      <div class="barber-card">
-        <div class="barber-num">01</div>
-        <div class="barber-avatar">🐺</div>
-        <div class="barber-name">Lobo</div>
-        <div class="barber-title">Maestro Barbero</div>
-        <div class="barber-schedule">
-          <strong>📅 Lunes a Sábado</strong>
-          🕘 9:00 AM — 6:30 PM
-        </div>
-      </div>
-      <div class="barber-card">
-        <div class="barber-num">02</div>
-        <div class="barber-avatar">✂️</div>
-        <div class="barber-name">Cachetes</div>
-        <div class="barber-title">Maestro Barbero</div>
-        <div class="barber-schedule">
-          <strong>📅 Lunes a Sábado</strong>
-          🕘 9:00 AM — 6:30 PM
-        </div>
-      </div>
+    <div class="barbers-grid" id="barbers-grid">
+      <!-- Renderizado dinámicamente por app.js -->
     </div>
   </div>
 </section>
@@ -273,62 +225,14 @@
         <div class="form-panel active" id="panel-1">
           <div class="form-group">
             <label class="form-label">Elige tu Servicio <span class="req">*</span></label>
-            <div class="svc-pick-grid">
-              <div class="svc-pick" data-service="corte" onclick="selectService('corte')">
-                <span class="svc-pick-ico">💈</span>
-                <div class="svc-pick-info">
-                  <div class="svc-pick-name">Corte de Cabello</div>
-                  <div class="svc-pick-meta">⏱ 30 min</div>
-                </div>
-                <div class="svc-pick-price">₡8.000</div>
-              </div>
-              <div class="svc-pick" data-service="barba" onclick="selectService('barba')">
-                <span class="svc-pick-ico">🪒</span>
-                <div class="svc-pick-info">
-                  <div class="svc-pick-name">Arreglo de Barba</div>
-                  <div class="svc-pick-meta">⏱ 30 min</div>
-                </div>
-                <div class="svc-pick-price">₡5.000</div>
-              </div>
-              <div class="svc-pick" data-service="combo" onclick="selectService('combo')">
-                <span class="svc-pick-ico">⭐</span>
-                <div class="svc-pick-info">
-                  <div class="svc-pick-name">Corte + Barba</div>
-                  <div class="svc-pick-meta">⏱ 60 min</div>
-                </div>
-                <div class="svc-pick-price">₡12.000</div>
-              </div>
-              <div class="svc-pick" data-service="navaja" onclick="selectService('navaja')">
-                <span class="svc-pick-ico">✨</span>
-                <div class="svc-pick-info">
-                  <div class="svc-pick-name">Afeitado a Navaja</div>
-                  <div class="svc-pick-meta">⏱ 45 min</div>
-                </div>
-                <div class="svc-pick-price">₡6.000</div>
-              </div>
-              <div class="svc-pick" data-service="nino" onclick="selectService('nino')">
-                <span class="svc-pick-ico">🧒</span>
-                <div class="svc-pick-info">
-                  <div class="svc-pick-name">Corte Niño</div>
-                  <div class="svc-pick-meta">⏱ 30 min</div>
-                </div>
-                <div class="svc-pick-price">₡5.000</div>
-              </div>
+            <div class="svc-pick-grid" id="svc-pick-grid">
+              <!-- Renderizado dinámicamente por app.js -->
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">Elige tu Barbero <span class="req">*</span></label>
-            <div class="barber-select-grid">
-              <div class="barber-option" data-barber="1" onclick="selectBarber(1)">
-                <div class="barber-option-avatar">🐺</div>
-                <div class="barber-option-name">Lobo</div>
-                <div class="barber-option-days">Lun — Sáb</div>
-              </div>
-              <div class="barber-option" data-barber="2" onclick="selectBarber(2)">
-                <div class="barber-option-avatar">✂️</div>
-                <div class="barber-option-name">Cachetes</div>
-                <div class="barber-option-days">Lun — Sáb</div>
-              </div>
+            <div class="barber-select-grid" id="barber-select-grid">
+              <!-- Renderizado dinámicamente por app.js -->
             </div>
           </div>
           <div class="form-nav">
@@ -476,20 +380,11 @@
     </div>
     <div class="form-group">
       <label class="form-label">Servicio</label>
-      <select class="form-control" id="edit-service">
-        <option value="corte">Corte de Cabello — ₡8.000</option>
-        <option value="barba">Arreglo de Barba — ₡5.000</option>
-        <option value="combo">Corte + Barba — ₡12.000</option>
-        <option value="navaja">Afeitado a Navaja — ₡6.000</option>
-        <option value="nino">Corte Niño — ₡5.000</option>
-      </select>
+      <select class="form-control" id="edit-service"></select>
     </div>
     <div class="form-group">
       <label class="form-label">Barbero</label>
-      <select class="form-control" id="edit-barber" onchange="loadEditSlots()">
-        <option value="1">Lobo (Lun–Sáb)</option>
-        <option value="2">Cachetes (Lun–Sáb)</option>
-      </select>
+      <select class="form-control" id="edit-barber" onchange="loadEditSlots()"></select>
     </div>
     <div class="form-group">
       <label class="form-label">Nueva Fecha</label>

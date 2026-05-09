@@ -27,26 +27,101 @@ const state = {
   editTime: null,
 };
 
-const SERVICE_NAMES = {
-  corte:  'Corte de Cabello',
-  barba:  'Arreglo de Barba',
-  combo:  'Corte + Barba',
-  navaja: 'Afeitado a Navaja',
-  nino:   'Corte Niño',
-};
+// Estado dinámico (se llena desde la API)
+let SERVICES_DATA = [];
+let BARBERS_DATA  = [];
+const SERVICE_NAMES = {}; // se llena dinámicamente
+const BARBER_NAMES  = {}; // se llena dinámicamente
 
-const BARBER_NAMES = {
-  1: 'Lobo',
-  2: 'Cachetes',
-};
+async function initSiteData() {
+  try {
+    const [svcRes, brbRes] = await Promise.all([
+      fetch(`${API_URL}/services`),
+      fetch(`${API_URL}/barbers`),
+    ]);
+    SERVICES_DATA = await svcRes.json();
+    BARBERS_DATA  = await brbRes.json();
 
-const SERVICES_DATA = [
-  { id: 'corte',  name: 'Corte de Cabello',  duration: 30, price: '₡8.000',  icon: '💈' },
-  { id: 'barba',  name: 'Arreglo de Barba',  duration: 30, price: '₡5.000',  icon: '🪒' },
-  { id: 'combo',  name: 'Corte + Barba',     duration: 60, price: '₡12.000', icon: '⭐' },
-  { id: 'navaja', name: 'Afeitado a Navaja', duration: 45, price: '₡6.000',  icon: '✨' },
-  { id: 'nino',   name: 'Corte Niño',        duration: 30, price: '₡5.000',  icon: '🧒' },
-];
+    // Llenar los lookups
+    SERVICES_DATA.forEach(s => { SERVICE_NAMES[s.slug] = s.name; });
+    BARBERS_DATA.forEach(b  => { BARBER_NAMES[b.barberId] = b.name; });
+
+    renderServiceCards();   // sección servicios del sitio
+    renderBarberCards();    // sección barberos del sitio
+    renderServicePicker();  // step 1 del booking
+    renderBarberPicker();   // step 1 del booking
+  } catch (e) {
+    console.error('Error cargando datos del sitio:', e);
+  }
+}
+
+function renderServiceCards() {
+  const grid = document.getElementById('services-grid');
+  if (!grid) return;
+  grid.innerHTML = SERVICES_DATA.map(s => `
+    <div class="service-card">
+      <span class="service-icon">${s.icon}</span>
+      <div class="service-name">${s.name}</div>
+      <div class="service-duration">⏱ ${s.duration} min</div>
+      <div class="service-price">${s.price}</div>
+    </div>`).join('');
+}
+
+function renderBarberCards() {
+  const grid = document.getElementById('barbers-grid');
+  if (!grid) return;
+  grid.innerHTML = BARBERS_DATA.map((b, i) => `
+    <div class="barber-card">
+      <div class="barber-num">0${i + 1}</div>
+      <div class="barber-avatar">${b.emoji}</div>
+      <div class="barber-name">${b.name}</div>
+      <div class="barber-title">${b.title}</div>
+      <div class="barber-schedule">
+        <strong>📅 Lunes a Sábado</strong>
+        🕘 9:00 AM — 6:30 PM
+      </div>
+    </div>`).join('');
+}
+
+function renderServicePicker() {
+  const grid = document.getElementById('svc-pick-grid');
+  if (!grid) return;
+  grid.innerHTML = SERVICES_DATA.map(s => `
+    <div class="svc-pick" data-service="${s.slug}" onclick="selectService('${s.slug}')">
+      <span class="svc-pick-ico">${s.icon}</span>
+      <div class="svc-pick-info">
+        <div class="svc-pick-name">${s.name}</div>
+        <div class="svc-pick-meta">⏱ ${s.duration} min</div>
+      </div>
+      <div class="svc-pick-price">${s.price}</div>
+    </div>`).join('');
+}
+
+function renderBarberPicker() {
+  const grid = document.getElementById('barber-select-grid');
+  if (!grid) return;
+  grid.innerHTML = BARBERS_DATA.map(b => `
+    <div class="barber-option" data-barber="${b.barberId}" onclick="selectBarber(${b.barberId})">
+      <div class="barber-option-avatar">${b.emoji}</div>
+      <div class="barber-option-name">${b.name}</div>
+      <div class="barber-option-days">Lun — Sáb</div>
+    </div>`).join('');
+}
+
+function populateEditModal() {
+  const svcSel = document.getElementById('edit-service');
+  const brbSel = document.getElementById('edit-barber');
+  if (svcSel) {
+    svcSel.innerHTML = SERVICES_DATA.map(s =>
+      `<option value="${s.slug}">${s.name} — ${s.price}</option>`
+    ).join('');
+  }
+  if (brbSel) {
+    brbSel.innerHTML = BARBERS_DATA.map(b =>
+      `<option value="${b.barberId}">${b.name} (Lun–Sáb)</option>`
+    ).join('');
+  }
+}
 
 const DAY_NAMES   = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
@@ -113,9 +188,9 @@ function goStep(n) {
 }
 
 function selectService(id) {
-  const svc = SERVICES_DATA.find(s => s.id === id);
+  const svc = SERVICES_DATA.find(s => s.slug === id);
   if (!svc) return;
-  state.service  = svc.id;
+  state.service  = svc.slug;
   state.duration = svc.duration;
   state.time = null;
   document.querySelectorAll('.svc-pick').forEach(el =>
@@ -159,6 +234,7 @@ function selectBarber(id) {
 
 // ─── Date input setup ───────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  initSiteData();
   const dateInput = document.getElementById('inp-date');
   dateInput.min = today();
   const max = new Date();
@@ -435,6 +511,7 @@ async function cancelAppointment() {
 
 // ─── Edit modal ─────────────────────────────────
 function openEditModal() {
+  populateEditModal();
   const appt = state.currentAppt;
   document.getElementById('edit-service').value = appt.service;
   document.getElementById('edit-barber').value  = appt.barberId;

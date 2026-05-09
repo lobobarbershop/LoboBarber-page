@@ -444,12 +444,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
       <div class="red-line"></div>
       <p class="sec-desc">Cada servicio es una experiencia. Trabajo artesanal con los mejores productos.</p>
     </div>
-    <div class="svc-grid">
-      <div class="svc-card"><span class="svc-ico">💈</span><div class="svc-name">Corte de Cabello</div><div class="svc-dur">⏱ 30 min</div><div class="svc-price">₡8.000</div></div>
-      <div class="svc-card"><span class="svc-ico">🪒</span><div class="svc-name">Arreglo de Barba</div><div class="svc-dur">⏱ 30 min</div><div class="svc-price">₡5.000</div></div>
-      <div class="svc-card"><span class="svc-ico">⭐</span><div class="svc-name">Corte + Barba</div><div class="svc-dur">⏱ 60 min</div><div class="svc-price">₡12.000</div></div>
-      <div class="svc-card"><span class="svc-ico">✨</span><div class="svc-name">Afeitado a Navaja</div><div class="svc-dur">⏱ 45 min</div><div class="svc-price">₡6.000</div></div>
-      <div class="svc-card"><span class="svc-ico">🧒</span><div class="svc-name">Corte Niño</div><div class="svc-dur">⏱ 30 min</div><div class="svc-price">₡5.000</div></div>
+    <div class="svc-grid" id="services-grid">
+      <!-- Renderizado dinámicamente por JS -->
     </div>
   </div>
 </section>
@@ -462,21 +458,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
       <h2 class="sec-title">Nuestros <span>Barberos</span></h2>
       <div class="red-line"></div>
     </div>
-    <div class="brb-grid">
-      <div class="brb-card">
-        <div class="brb-num">01</div>
-        <div class="brb-ava">🐺</div>
-        <div class="brb-name">Lobo</div>
-        <div class="brb-title">Maestro Barbero</div>
-        <div class="brb-sched"><strong>📅 Lunes a Sábado</strong>🕘 9:00 AM — 6:30 PM</div>
-      </div>
-      <div class="brb-card">
-        <div class="brb-num">02</div>
-        <div class="brb-ava">✂️</div>
-        <div class="brb-name">Cachetes</div>
-        <div class="brb-title">Maestro Barbero</div>
-        <div class="brb-sched"><strong>📅 Lunes a Sábado</strong>🕘 9:00 AM — 6:30 PM</div>
-      </div>
+    <div class="brb-grid" id="barbers-grid">
+      <!-- Renderizado dinámicamente por JS -->
     </div>
   </div>
 </section>
@@ -757,6 +740,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3rem 1.
         <div class="adm-sb-item" onclick="admShowView('reportes',this)"><span>📈</span><span>Reportes</span></div>
         <div class="adm-sb-item" onclick="admShowView('horarios',this)"><span>🗓️</span><span>Horarios</span></div>
         <div class="adm-sb-item" onclick="admShowView('ia-config',this)"><span>🤖</span><span>Config. IA</span></div>
+        <div class="adm-sb-item" onclick="admShowView('servicios',this)"><span>✂️</span><span>Servicios</span></div>
+        <div class="adm-sb-item" onclick="admShowView('barberos',this)"><span>👤</span><span>Barberos</span></div>
         <div class="adm-sb-item" onclick="admShowView('whatsapp',this)"><span>💬</span><span>WhatsApp</span></div>
       </nav>
       <div class="adm-sb-footer">
@@ -1005,6 +990,28 @@ Responde siempre en español. Sé breve y amigable.</textarea>
           </div>
         </div>
 
+        <!-- SERVICIOS DEMO -->
+        <div class="adm-view" id="adm-view-servicios">
+          <div class="adm-table-wrap" style="margin-bottom:1.5rem">
+            <div class="adm-table-head">
+              <div style="font-weight:600">✂️ Servicios <span id="adm-svc-count" style="background:var(--red);color:var(--black);border-radius:100px;padding:2px 8px;font-size:.7rem;font-weight:700">0</span></div>
+              <button onclick="admOpenAddService()" style="background:var(--red);color:var(--black);border:none;border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:600;cursor:pointer">+ Agregar</button>
+            </div>
+            <div id="adm-svc-list" style="padding:1rem 1.4rem"></div>
+          </div>
+        </div>
+
+        <!-- BARBEROS DEMO -->
+        <div class="adm-view" id="adm-view-barberos">
+          <div class="adm-table-wrap" style="margin-bottom:1.5rem">
+            <div class="adm-table-head">
+              <div style="font-weight:600">👤 Barberos <span id="adm-brb-count" style="background:var(--red);color:var(--black);border-radius:100px;padding:2px 8px;font-size:.7rem;font-weight:700">0</span></div>
+              <button onclick="admOpenAddBarber()" style="background:var(--red);color:var(--black);border:none;border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:600;cursor:pointer">+ Agregar</button>
+            </div>
+            <div id="adm-brb-list" style="padding:1rem 1.4rem"></div>
+          </div>
+        </div>
+
       </div><!-- /adm-content -->
     </main>
   </div><!-- /adm-layout -->
@@ -1031,6 +1038,19 @@ const BARBERS = { 1:'Lobo', 2:'Cachetes' };
 const DAYS   = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const DB = [];
+
+// Datos dinámicos del sitio (demo)
+const DEMO_SITE_SERVICES = [
+  { slug:'corte',  name:'Corte de Cabello',  duration:30, price:'₡8.000', priceNum:8000, icon:'💈' },
+  { slug:'barba',  name:'Arreglo de Barba',  duration:30, price:'₡5.000', priceNum:5000, icon:'🪒' },
+  { slug:'combo',  name:'Corte + Barba',     duration:60, price:'₡12.000',priceNum:12000,icon:'⭐' },
+  { slug:'navaja', name:'Afeitado a Navaja', duration:45, price:'₡6.000', priceNum:6000, icon:'✨' },
+  { slug:'nino',   name:'Corte Niño',        duration:30, price:'₡5.000', priceNum:5000, icon:'🧒' },
+];
+const DEMO_SITE_BARBERS = [
+  { barberId:1, name:'Lobo',    title:'Maestro Barbero', emoji:'🐺' },
+  { barberId:2, name:'Cachetes',title:'Maestro Barbero', emoji:'✂️' },
+];
 
 const S = {
   step:1, barberId:null, svc:null,
@@ -1418,6 +1438,22 @@ document.getElementById('modal-edit').addEventListener('click', e=>{
    INIT
 ════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', ()=>{
+  // Render dinámico de servicios en el sitio cliente
+  const svcGrid = document.getElementById('services-grid');
+  if (svcGrid) svcGrid.innerHTML = DEMO_SITE_SERVICES.map(s => `
+    <div class="svc-card"><span class="svc-ico">${s.icon}</span><div class="svc-name">${s.name}</div><div class="svc-dur">⏱ ${s.duration} min</div><div class="svc-price">${s.price}</div></div>`).join('');
+
+  const brbGrid = document.getElementById('barbers-grid');
+  if (brbGrid) brbGrid.innerHTML = DEMO_SITE_BARBERS.map((b,i) => `
+    <div class="brb-card"><div class="brb-num">0${i+1}</div><div class="brb-ava">${b.emoji}</div><div class="brb-name">${b.name}</div><div class="brb-title">${b.title}</div><div class="brb-sched"><strong>📅 Lunes a Sábado</strong>🕘 9:00 AM — 6:30 PM</div></div>`).join('');
+
+  // Render service picker en el booking
+  const svcPicker = document.getElementById('svc-pick-grid-demo');
+  if (svcPicker) svcPicker.innerHTML = DEMO_SITE_SERVICES.map(s => `
+    <div class="brb-opt" onclick="document.getElementById('s-svc').value='${s.slug}';selService('${s.slug}',${s.duration})">
+      <div class="brb-opt-ava">${s.icon}</div><div class="brb-opt-name" style="font-size:.85rem">${s.name}</div><div class="brb-opt-days">${s.price}</div>
+    </div>`).join('');
+
   const di=document.getElementById('s-date');
   if(di){
     di.min=today();
@@ -1429,7 +1465,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 /* ════════════════════════════════════════════
    ADMIN DEMO
 ════════════════════════════════════════════ */
-const ADM_VIEWS = { dashboard:'📊 Dashboard', citas:'📋 Todas las Citas', calendario:'📅 Vista por Día', reportes:'📈 Reportes Semanales', horarios:'🗓️ Gestión de Horarios', 'ia-config':'🤖 Configuración de IA', 'whatsapp':'💬 WhatsApp' };
+const ADM_VIEWS = { dashboard:'📊 Dashboard', citas:'📋 Todas las Citas', calendario:'📅 Vista por Día', reportes:'📈 Reportes Semanales', horarios:'🗓️ Gestión de Horarios', 'ia-config':'🤖 Configuración de IA', 'whatsapp':'💬 WhatsApp', 'servicios':'✂️ Gestión de Servicios', 'barberos':'👤 Gestión de Barberos' };
 
 const DEMO_APPTS = [
   { code:'LB3X9AB2', clientName:'Carlos Mendoza',   clientPhone:'+506 8888-1234', service:'combo',  barberId:1, date:'2026-05-08', time:'09:00', status:'confirmed' },
@@ -1508,6 +1544,8 @@ function admShowView(name, el) {
   const title = document.getElementById('adm-view-title');
   if (title) title.textContent = ADM_VIEWS[name] || name;
   if (name === 'calendario') admRenderCal();
+  if (name === 'servicios') admInitServicios();
+  if (name === 'barberos')  admInitBarberos();
 }
 
 function admRenderToday() {
@@ -1670,6 +1708,98 @@ function admWaSend() {
     msgs.push({ body: 'Este es un demo. En la versión real, el cliente recibe tu mensaje por WhatsApp.', dir: 'in', time: new Date().toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit' }) });
     admWaRenderMsgs(msgs);
   }, 1500);
+}
+
+/* ══════════════════════════════════════════════
+   GESTIÓN SERVICIOS Y BARBEROS — DEMO ADMIN
+══════════════════════════════════════════════ */
+// Datos mutables para demo
+let admDemoServices = [...DEMO_SITE_SERVICES.map(s => ({...s}))];
+let admDemoBarbers  = [...DEMO_SITE_BARBERS.map(b => ({...b}))];
+
+function admInitServicios() {
+  const el = document.getElementById('adm-svc-list');
+  document.getElementById('adm-svc-count').textContent = admDemoServices.length;
+  el.innerHTML = admDemoServices.map(s => `
+    <div style="display:flex;align-items:center;gap:1rem;padding:.85rem 0;border-bottom:1px solid #2A2A2A">
+      <div style="width:42px;height:42px;background:#1C1C1C;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">${s.icon}</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:.9rem">${s.name}</div>
+        <div style="font-size:.75rem;color:var(--muted)">⏱ ${s.duration} min</div>
+      </div>
+      <div style="font-family:Oswald,sans-serif;font-size:1.2rem;color:var(--red)">${s.price}</div>
+      <div style="display:flex;gap:.4rem">
+        <button onclick="admEditService('${s.slug}')" style="width:28px;height:28px;border-radius:6px;border:1px solid #2E2E2E;background:transparent;cursor:pointer;font-size:.85rem">✏️</button>
+        <button onclick="admDeleteService('${s.slug}')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(229,57,53,.3);background:transparent;color:#E53935;cursor:pointer;font-size:.85rem">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function admOpenAddService() {
+  const name     = prompt('Nombre del nuevo servicio:');
+  if (!name) return;
+  const price    = prompt('Precio en colones (ej: 9000):');
+  const duration = prompt('Duración en minutos (ej: 30):');
+  const icon     = prompt('Emoji/ícono:', '✂️') || '✂️';
+  if (!price || !duration) return;
+  const slug = name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+  const priceNum = parseInt(price);
+  admDemoServices.push({ slug, name, duration: parseInt(duration), price: '₡' + priceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'), priceNum, icon });
+  toast('ok','Servicio agregado (Demo)', name);
+  admInitServicios();
+}
+
+function admEditService(slug) {
+  const s = admDemoServices.find(s => s.slug === slug);
+  if (!s) return;
+  const newPrice = prompt(`Nuevo precio para "${s.name}":`, s.priceNum);
+  if (!newPrice) return;
+  s.priceNum = parseInt(newPrice);
+  s.price = '₡' + s.priceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+  toast('ok','Precio actualizado (Demo)', s.name);
+  admInitServicios();
+}
+
+function admDeleteService(slug) {
+  const s = admDemoServices.find(s => s.slug === slug);
+  if (!s || !confirm(`¿Eliminar "${s.name}"?`)) return;
+  admDemoServices = admDemoServices.filter(s => s.slug !== slug);
+  toast('ok','Eliminado (Demo)', s.name);
+  admInitServicios();
+}
+
+function admInitBarberos() {
+  const el = document.getElementById('adm-brb-list');
+  document.getElementById('adm-brb-count').textContent = admDemoBarbers.length;
+  el.innerHTML = admDemoBarbers.map(b => `
+    <div style="display:flex;align-items:center;gap:1rem;padding:.85rem 0;border-bottom:1px solid #2A2A2A">
+      <div style="width:42px;height:42px;background:linear-gradient(135deg,var(--red-d),var(--red));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">${b.emoji}</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:.9rem">${b.name}</div>
+        <div style="font-size:.75rem;color:var(--muted)">${b.title} · ID: ${b.barberId}</div>
+      </div>
+      <div style="display:flex;gap:.4rem">
+        <button onclick="admDeleteBarber(${b.barberId},'${b.name}')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(229,57,53,.3);background:transparent;color:#E53935;cursor:pointer;font-size:.85rem">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function admOpenAddBarber() {
+  const name  = prompt('Nombre del nuevo barbero:');
+  if (!name) return;
+  const title = prompt('Título (ej: Maestro Barbero):', 'Maestro Barbero') || 'Maestro Barbero';
+  const emoji = prompt('Emoji/avatar:', '✂️') || '✂️';
+  const newId = Math.max(...admDemoBarbers.map(b => b.barberId)) + 1;
+  admDemoBarbers.push({ barberId: newId, name, title, emoji });
+  toast('ok','Barbero agregado (Demo)', name);
+  admInitBarberos();
+}
+
+function admDeleteBarber(barberId, name) {
+  if (!confirm(`¿Eliminar a "${name}"?`)) return;
+  admDemoBarbers = admDemoBarbers.filter(b => b.barberId !== barberId);
+  toast('ok','Eliminado (Demo)', name);
+  admInitBarberos();
 }
 </script>
 </body>

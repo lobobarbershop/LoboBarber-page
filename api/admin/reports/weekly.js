@@ -1,8 +1,8 @@
 const connectDB = require('../../_lib/mongodb');
-const { Appointment } = require('../../_lib/models');
+const { Appointment, ServiceModel, BarberModel } = require('../../_lib/models');
 const setCors = require('../../_lib/cors');
 const adminAuth = require('../../_lib/auth');
-const { PRICES_NUM, BARBER_NAMES } = require('../../_lib/helpers');
+const { PRICES_NUM, BARBER_NAMES } = require('../../_lib/helpers'); // mantener como fallback
 
 module.exports = async (req, res) => {
   setCors(res);
@@ -43,18 +43,32 @@ module.exports = async (req, res) => {
       status: 'confirmed',
     }).lean();
 
+    // Cargar precios y barberos dinámicos desde BD
+    const dbServices = await ServiceModel.find().lean();
+    const pricesMap = {};
+    dbServices.forEach(s => { pricesMap[s.slug] = s.price; });
+
+    const dbBarbers = await BarberModel.find({ active: true }).sort({ order: 1 }).lean();
+    const barberNamesMap = {};
+    dbBarbers.forEach(b => { barberNamesMap[b.barberId] = b.name; });
+
+    // Construir lista de IDs de barberos (BD o fallback a [1,2])
+    const barberIds = dbBarbers.length
+      ? dbBarbers.map(b => b.barberId)
+      : [1, 2];
+
     // Agrupar por barbero
-    const barbers = [1, 2].map(id => {
+    const barbers = barberIds.map(id => {
       const barberAppts = appointments.filter(a => a.barberId === id);
       const services = {};
       let totalRevenue = 0;
       barberAppts.forEach(a => {
         services[a.service] = (services[a.service] || 0) + 1;
-        totalRevenue += PRICES_NUM[a.service] || 0;
+        totalRevenue += pricesMap[a.service] !== undefined ? pricesMap[a.service] : (PRICES_NUM[a.service] || 0);
       });
       return {
         id,
-        name: BARBER_NAMES[id],
+        name: barberNamesMap[id] || BARBER_NAMES[id] || `Barbero ${id}`,
         totalAppointments: barberAppts.length,
         totalRevenue,
         services,

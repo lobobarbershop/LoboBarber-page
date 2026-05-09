@@ -45,7 +45,33 @@ function toMinutes(timeStr) {
 function barberWorksOnDay(barberId, dateStr) {
   const [y, mo, d] = dateStr.split('-').map(Number);
   const day = new Date(Date.UTC(y, mo - 1, d)).getUTCDay();
-  return (barberId === 1 || barberId === 2) && day >= 1 && day <= 6;
+  return barberId > 0 && day >= 1 && day <= 6;
 }
 
-module.exports = { generateCode, SERVICES, SERVICE_DURATIONS, PRICES_NUM, BARBER_NAMES, generateSlots, generateSlotsCustom, toMinutes, barberWorksOnDay };
+const DEFAULT_SERVICES_SEED = [
+  { slug: 'corte',  name: 'Corte de Cabello',  duration: 30, price: 8000,  icon: '💈', order: 1 },
+  { slug: 'barba',  name: 'Arreglo de Barba',  duration: 30, price: 5000,  icon: '🪒', order: 2 },
+  { slug: 'combo',  name: 'Corte + Barba',     duration: 60, price: 12000, icon: '⭐', order: 3 },
+  { slug: 'navaja', name: 'Afeitado a Navaja', duration: 45, price: 6000,  icon: '✨', order: 4 },
+  { slug: 'nino',   name: 'Corte Niño',        duration: 30, price: 5000,  icon: '🧒', order: 5 },
+];
+
+const DEFAULT_BARBERS_SEED = [
+  { barberId: 1, name: 'Lobo',     title: 'Maestro Barbero', emoji: '🐺', order: 1 },
+  { barberId: 2, name: 'Cachetes', title: 'Maestro Barbero', emoji: '✂️', order: 2 },
+];
+
+function formatPrice(num) {
+  return '₡' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function slugify(text) {
+  return text.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+module.exports = { generateCode, SERVICES, SERVICE_DURATIONS, PRICES_NUM, BARBER_NAMES, generateSlots, generateSlotsCustom, toMinutes, barberWorksOnDay, DEFAULT_SERVICES_SEED, DEFAULT_BARBERS_SEED, formatPrice, slugify };

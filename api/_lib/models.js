@@ -5,7 +5,7 @@ const appointmentSchema = new mongoose.Schema({
   clientName:  { type: String, required: true, trim: true },
   clientPhone: { type: String, required: true, trim: true },
   clientEmail: { type: String, trim: true },
-  barberId:    { type: Number, required: true, enum: [1, 2] },
+  barberId:    { type: Number, required: true },
   service:     { type: String, required: true },
   date:        { type: String, required: true },
   time:        { type: String, required: true },
@@ -19,7 +19,7 @@ const botConfigSchema = new mongoose.Schema({
 });
 
 const barberExceptionSchema = new mongoose.Schema({
-  barberId:  { type: Number, required: true, enum: [1, 2] },
+  barberId:  { type: Number, required: true },
   date:      { type: String, required: true },
   type:      { type: String, required: true, enum: ['day_off', 'custom_hours'] },
   startTime: { type: String },
@@ -29,7 +29,7 @@ const barberExceptionSchema = new mongoose.Schema({
 });
 
 const barberSettingsSchema = new mongoose.Schema({
-  barberId:     { type: Number, required: true, unique: true, enum: [1, 2] },
+  barberId:     { type: Number, required: true, unique: true },
   slotInterval: { type: Number, default: 30 },
   startTime:    { type: String, default: '09:00' },
   endTime:      { type: String, default: '18:30' },
@@ -60,4 +60,25 @@ const waConversationSchema = new mongoose.Schema({
 const WaMessage      = mongoose.models.WaMessage      || mongoose.model('WaMessage', waMessageSchema);
 const WaConversation = mongoose.models.WaConversation || mongoose.model('WaConversation', waConversationSchema);
 
-module.exports = { Appointment, BotConfig, BarberException, BarberSettings, WaMessage, WaConversation };
+const serviceSchema = new mongoose.Schema({
+  slug:     { type: String, required: true, unique: true },
+  name:     { type: String, required: true },
+  duration: { type: Number, required: true },
+  price:    { type: Number, required: true },
+  icon:     { type: String, default: '✂️' },
+  active:   { type: Boolean, default: true },
+  order:    { type: Number, default: 0 },
+});
+const ServiceModel = mongoose.models.ServiceModel || mongoose.model('ServiceModel', serviceSchema);
+
+const barberSchema = new mongoose.Schema({
+  barberId: { type: Number, required: true, unique: true },
+  name:     { type: String, required: true },
+  title:    { type: String, default: 'Maestro Barbero' },
+  emoji:    { type: String, default: '✂️' },
+  active:   { type: Boolean, default: true },
+  order:    { type: Number, default: 0 },
+});
+const BarberModel = mongoose.models.BarberModel || mongoose.model('BarberModel', barberSchema);
+
+module.exports = { Appointment, BotConfig, BarberException, BarberSettings, WaMessage, WaConversation, ServiceModel, BarberModel };

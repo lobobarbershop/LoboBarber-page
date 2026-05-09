@@ -1,5 +1,5 @@
 const connectDB = require('../_lib/mongodb');
-const { Appointment } = require('../_lib/models');
+const { Appointment, ServiceModel } = require('../_lib/models');
 const setCors = require('../_lib/cors');
 const { generateCode, barberWorksOnDay } = require('../_lib/helpers');
 
@@ -22,6 +22,9 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'No puedes agendar en una fecha pasada' });
 
     await connectDB();
+
+    const serviceDoc = await ServiceModel.findOne({ slug: service, active: true });
+    if (!serviceDoc) return res.status(400).json({ error: 'Servicio no válido' });
 
     const conflict = await Appointment.findOne({ barberId: id, date, time, status: 'confirmed' });
     if (conflict) return res.status(409).json({ error: 'Ese horario ya está ocupado' });

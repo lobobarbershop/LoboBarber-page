@@ -1,5 +1,5 @@
 const connectDB = require('./_lib/mongodb');
-const { Appointment, BarberSettings, BarberException } = require('./_lib/models');
+const { Appointment, BarberSettings, BarberException, ServiceModel } = require('./_lib/models');
 const setCors = require('./_lib/cors');
 const { SERVICE_DURATIONS, generateSlotsCustom, toMinutes, barberWorksOnDay } = require('./_lib/helpers');
 
@@ -34,7 +34,15 @@ module.exports = async (req, res) => {
       }
     }
 
-    const duration = SERVICE_DURATIONS[service] || 30;
+    // Obtener duración del servicio solicitado desde BD (fallback al mapa estático)
+    const serviceDoc = await ServiceModel.findOne({ slug: service, active: true });
+    const duration = serviceDoc ? serviceDoc.duration : (SERVICE_DURATIONS[service] || 30);
+
+    // Cargar duraciones de todos los servicios para calcular conflictos correctamente
+    const allServices = await ServiceModel.find({ active: true }).select('slug duration').lean();
+    const dbDurations = {};
+    allServices.forEach(s => { dbDurations[s.slug] = s.duration; });
+
     const CLOSING  = toMinutes(settings.endTime);
 
     const booked = await Appointment.find({ barberId: id, date, status: 'confirmed' })
@@ -46,7 +54,7 @@ module.exports = async (req, res) => {
       if (slotEnd > CLOSING) return false;
       return !booked.some(appt => {
         const apptStart = toMinutes(appt.time);
-        const apptEnd   = apptStart + (SERVICE_DURATIONS[appt.service] || 30);
+        const apptEnd   = apptStart + (dbDurations[appt.service] || SERVICE_DURATIONS[appt.service] || 30);
         return slotStart < apptEnd && apptStart < slotEnd;
       });
     });

@@ -219,6 +219,23 @@ select.fc-sm{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w
   .tbl th:nth-child(4),.tbl td:nth-child(4),.tbl th:nth-child(5),.tbl td:nth-child(5){display:none}
 }
 
+/* ── SERVICES & BARBERS MGMT ───────────────────────────── */
+.mgmt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem}
+.mgmt-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.4rem;display:flex;align-items:center;gap:1rem;transition:border-color .2s}
+.mgmt-card:hover{border-color:var(--gold-d)}
+.mgmt-card-ico{font-size:2rem;flex-shrink:0;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:var(--card2);border-radius:8px}
+.mgmt-card-info{flex:1;min-width:0}
+.mgmt-card-name{font-weight:600;font-size:.95rem;margin-bottom:.2rem}
+.mgmt-card-meta{font-size:.78rem;color:var(--muted)}
+.mgmt-card-price{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);letter-spacing:1px;flex-shrink:0}
+.mgmt-card-actions{display:flex;gap:.4rem;flex-shrink:0}
+.mgmt-inactive{opacity:.45}
+.add-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.add-form-title{font-size:.88rem;font-weight:600;margin-bottom:1rem;color:var(--gold)}
+.add-form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.75rem}
+.add-form-row.triple{grid-template-columns:1fr 1fr 1fr}
+.add-form label{font-size:.72rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:.3rem}
+
 /* ── WHATSAPP VIEW ──────────────────────────── */
 .wa-layout{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 60px);overflow:hidden;background:var(--black);border:1px solid var(--border);border-radius:12px}
 .wa-sidebar{border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
@@ -305,6 +322,12 @@ select.fc-sm{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w
         </div>
         <div class="sb-item" onclick="showView('ia-config')">
           <span class="ico">🤖</span><span>Config. IA</span>
+        </div>
+        <div class="sb-item" onclick="showView('servicios')">
+          <span class="ico">✂️</span><span>Servicios</span>
+        </div>
+        <div class="sb-item" onclick="showView('barberos')">
+          <span class="ico">👤</span><span>Barberos</span>
         </div>
         <div class="sb-item" onclick="showView('whatsapp')">
           <span class="ico">💬</span><span>WhatsApp</span>
@@ -481,6 +504,82 @@ select.fc-sm{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w
               </tr></thead>
               <tbody id="exceptions-tbody"><tr><td colspan="5" class="tbl-empty"><span class="spin"></span></td></tr></tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- ── SERVICIOS ── -->
+        <div class="view" id="view-servicios">
+          <!-- Formulario para agregar servicio -->
+          <div class="add-form">
+            <div class="add-form-title">➕ Agregar nuevo servicio</div>
+            <div class="add-form-row triple">
+              <div>
+                <label>Nombre del servicio *</label>
+                <input type="text" class="fc-sm" id="svc-name" placeholder="Ej: Corte Premium" style="width:100%"/>
+              </div>
+              <div>
+                <label>Precio en colones *</label>
+                <input type="number" class="fc-sm" id="svc-price" placeholder="Ej: 10000" style="width:100%" min="0"/>
+              </div>
+              <div>
+                <label>Duración (minutos) *</label>
+                <input type="number" class="fc-sm" id="svc-duration" placeholder="Ej: 30" style="width:100%" min="5" step="5"/>
+              </div>
+            </div>
+            <div class="add-form-row" style="grid-template-columns:80px 1fr auto">
+              <div>
+                <label>Ícono (emoji)</label>
+                <input type="text" class="fc-sm" id="svc-icon" placeholder="✂️" style="width:100%;font-size:1.3rem;text-align:center" maxlength="4"/>
+              </div>
+              <div style="display:flex;align-items:flex-end">
+                <button class="btn btn-g" style="width:auto;padding:10px 28px" onclick="adminAddService()">Agregar Servicio</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lista de servicios -->
+          <div class="table-wrap">
+            <div class="table-head">
+              <div class="table-title">✂️ Servicios actuales <span class="count-badge" id="svc-count">0</span></div>
+              <button class="btn btn-o btn-sm" onclick="loadServiciosView()">↻ Actualizar</button>
+            </div>
+            <div id="svc-list" style="padding:1rem 1.4rem">
+              <div class="tbl-empty"><span class="spin"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── BARBEROS ── -->
+        <div class="view" id="view-barberos">
+          <!-- Formulario para agregar barbero -->
+          <div class="add-form">
+            <div class="add-form-title">➕ Agregar nuevo barbero</div>
+            <div class="add-form-row triple">
+              <div>
+                <label>Nombre *</label>
+                <input type="text" class="fc-sm" id="brb-name" placeholder="Ej: El Chino" style="width:100%"/>
+              </div>
+              <div>
+                <label>Título</label>
+                <input type="text" class="fc-sm" id="brb-title" placeholder="Maestro Barbero" style="width:100%"/>
+              </div>
+              <div>
+                <label>Emoji / Avatar</label>
+                <input type="text" class="fc-sm" id="brb-emoji" placeholder="✂️" style="width:100%;font-size:1.3rem;text-align:center" maxlength="4"/>
+              </div>
+            </div>
+            <button class="btn btn-g" style="width:auto;padding:10px 28px" onclick="adminAddBarber()">Agregar Barbero</button>
+          </div>
+
+          <!-- Lista de barberos -->
+          <div class="table-wrap">
+            <div class="table-head">
+              <div class="table-title">👤 Barberos actuales <span class="count-badge" id="brb-count">0</span></div>
+              <button class="btn btn-o btn-sm" onclick="loadBarberosView()">↻ Actualizar</button>
+            </div>
+            <div id="brb-list" style="padding:1rem 1.4rem">
+              <div class="tbl-empty"><span class="spin"></span></div>
+            </div>
           </div>
         </div>
 
@@ -703,6 +802,8 @@ const VIEW_TITLES = {
   horarios:  '🗓️ Gestión de Horarios',
   'ia-config': '🤖 Configuración de IA',
   whatsapp: '💬 WhatsApp',
+  servicios: '✂️ Gestión de Servicios',
+  barberos:  '👤 Gestión de Barberos',
 };
 
 function showView(name) {
@@ -717,6 +818,8 @@ function showView(name) {
   if (name === 'horarios')  loadScheduleView();
   if (name === 'ia-config') loadBotConfig();
   if (name === 'whatsapp') loadWhatsappView();
+  if (name === 'servicios') loadServiciosView();
+  if (name === 'barberos')  loadBarberosView();
 }
 
 /* ══════════════════════════════════════════════
@@ -1491,6 +1594,166 @@ document.addEventListener('click', e => {
     }
   }
 });
+
+/* ══════════════════════════════════════════════
+   GESTIÓN DE SERVICIOS
+══════════════════════════════════════════════ */
+async function loadServiciosView() {
+  const el = document.getElementById('svc-list');
+  el.innerHTML = '<div class="tbl-empty"><span class="spin"></span></div>';
+  try {
+    const res = await fetch(`${API_URL}/api/admin/services`, { headers: authHeaders() });
+    if (res.status === 401) { logout(); return; }
+    const services = await res.json();
+    document.getElementById('svc-count').textContent = services.length;
+    if (!services.length) {
+      el.innerHTML = '<div class="tbl-empty">No hay servicios. Agrega el primero.</div>';
+      return;
+    }
+    el.innerHTML = `<div class="mgmt-grid">${services.map(s => `
+      <div class="mgmt-card${s.active ? '' : ' mgmt-inactive'}">
+        <div class="mgmt-card-ico">${s.icon}</div>
+        <div class="mgmt-card-info">
+          <div class="mgmt-card-name">${s.name}</div>
+          <div class="mgmt-card-meta">⏱ ${s.duration} min · ${s.active ? '✅ Activo' : '❌ Inactivo'}</div>
+        </div>
+        <div class="mgmt-card-price">${s.price}</div>
+        <div class="mgmt-card-actions">
+          <button class="btn-icon" title="Editar precio" onclick="editServicePrice('${s.slug}','${s.name}',${s.priceNum},${s.duration},'${s.icon}')">✏️</button>
+          <button class="btn-icon" title="${s.active ? 'Desactivar' : 'Activar'}" onclick="toggleService('${s.slug}',${!s.active})">${s.active ? '🔴' : '🟢'}</button>
+          <button class="btn-icon del" title="Eliminar" onclick="deleteService('${s.slug}','${s.name}')">🗑</button>
+        </div>
+      </div>`).join('')}</div>`;
+  } catch { el.innerHTML = '<div class="tbl-empty">Error al cargar servicios.</div>'; }
+}
+
+async function adminAddService() {
+  const name     = document.getElementById('svc-name').value.trim();
+  const price    = parseInt(document.getElementById('svc-price').value);
+  const duration = parseInt(document.getElementById('svc-duration').value);
+  const icon     = document.getElementById('svc-icon').value.trim() || '✂️';
+  if (!name || !price || !duration) { toast('err','Completa los campos','Nombre, precio y duración son requeridos.'); return; }
+  try {
+    const res = await fetch(`${API_URL}/api/admin/services`, {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ name, price, duration, icon }),
+    });
+    const d = await res.json();
+    if (res.ok) {
+      toast('ok', 'Servicio agregado', d.service.name);
+      ['svc-name','svc-price','svc-duration','svc-icon'].forEach(id => document.getElementById(id).value = '');
+      loadServiciosView();
+    } else { toast('err', 'Error', d.error); }
+  } catch { toast('err','Error','No se pudo agregar.'); }
+}
+
+function editServicePrice(slug, name, price, duration, icon) {
+  const newPrice = prompt(`Nuevo precio para "${name}" (en colones, sin signos):\nActual: ${price}`, price);
+  if (!newPrice || isNaN(parseInt(newPrice))) return;
+  const newDur = prompt(`Duración en minutos:\nActual: ${duration}`, duration);
+  if (!newDur || isNaN(parseInt(newDur))) return;
+  fetch(`${API_URL}/api/admin/services/${slug}`, {
+    method: 'PUT', headers: authHeaders(),
+    body: JSON.stringify({ price: parseInt(newPrice), duration: parseInt(newDur) }),
+  }).then(r => r.json()).then(d => {
+    if (d.success) { toast('ok','Servicio actualizado', name); loadServiciosView(); }
+    else toast('err','Error', d.error);
+  });
+}
+
+async function toggleService(slug, active) {
+  const res = await fetch(`${API_URL}/api/admin/services/${slug}`, {
+    method: 'PUT', headers: authHeaders(), body: JSON.stringify({ active }),
+  });
+  if (res.ok) { toast('ok', active ? 'Servicio activado' : 'Servicio desactivado', ''); loadServiciosView(); }
+}
+
+async function deleteService(slug, name) {
+  if (!confirm(`¿Eliminar el servicio "${name}"? Esta acción no se puede deshacer.`)) return;
+  const res = await fetch(`${API_URL}/api/admin/services/${slug}`, { method: 'DELETE', headers: authHeaders() });
+  const d = await res.json();
+  if (res.ok) { toast('ok','Servicio eliminado', name); loadServiciosView(); }
+  else toast('err','Error', d.error);
+}
+
+/* ══════════════════════════════════════════════
+   GESTIÓN DE BARBEROS
+══════════════════════════════════════════════ */
+async function loadBarberosView() {
+  const el = document.getElementById('brb-list');
+  el.innerHTML = '<div class="tbl-empty"><span class="spin"></span></div>';
+  try {
+    const res = await fetch(`${API_URL}/api/admin/barbers`, { headers: authHeaders() });
+    if (res.status === 401) { logout(); return; }
+    const barbers = await res.json();
+    document.getElementById('brb-count').textContent = barbers.length;
+    if (!barbers.length) {
+      el.innerHTML = '<div class="tbl-empty">No hay barberos.</div>';
+      return;
+    }
+    el.innerHTML = `<div class="mgmt-grid">${barbers.map(b => `
+      <div class="mgmt-card${b.active ? '' : ' mgmt-inactive'}">
+        <div class="mgmt-card-ico" style="font-size:2rem">${b.emoji}</div>
+        <div class="mgmt-card-info">
+          <div class="mgmt-card-name">${b.name}</div>
+          <div class="mgmt-card-meta">${b.title} · ID: ${b.barberId} · ${b.active ? '✅ Activo' : '❌ Inactivo'}</div>
+        </div>
+        <div class="mgmt-card-actions">
+          <button class="btn-icon" title="Editar" onclick="editBarber(${b.barberId},'${b.name}','${b.title}','${b.emoji}')">✏️</button>
+          <button class="btn-icon" title="${b.active?'Desactivar':'Activar'}" onclick="toggleBarber(${b.barberId},${!b.active})">${b.active?'🔴':'🟢'}</button>
+          <button class="btn-icon del" title="Eliminar" onclick="deleteBarber(${b.barberId},'${b.name}')">🗑</button>
+        </div>
+      </div>`).join('')}</div>`;
+  } catch { el.innerHTML = '<div class="tbl-empty">Error al cargar.</div>'; }
+}
+
+async function adminAddBarber() {
+  const name  = document.getElementById('brb-name').value.trim();
+  const title = document.getElementById('brb-title').value.trim() || 'Maestro Barbero';
+  const emoji = document.getElementById('brb-emoji').value.trim() || '✂️';
+  if (!name) { toast('err','Nombre requerido','Ingresa el nombre del barbero.'); return; }
+  try {
+    const res = await fetch(`${API_URL}/api/admin/barbers`, {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ name, title, emoji }),
+    });
+    const d = await res.json();
+    if (res.ok) {
+      toast('ok','Barbero agregado', `${d.barber.name} (ID: ${d.barber.barberId})`);
+      ['brb-name','brb-title','brb-emoji'].forEach(id => document.getElementById(id).value = '');
+      loadBarberosView();
+    } else { toast('err','Error', d.error); }
+  } catch { toast('err','Error','No se pudo agregar.'); }
+}
+
+function editBarber(barberId, name, title, emoji) {
+  const newName  = prompt(`Nombre del barbero:\nActual: ${name}`, name);
+  if (!newName) return;
+  const newTitle = prompt(`Título:\nActual: ${title}`, title) || title;
+  const newEmoji = prompt(`Emoji/Avatar:\nActual: ${emoji}`, emoji) || emoji;
+  fetch(`${API_URL}/api/admin/barbers/${barberId}`, {
+    method: 'PUT', headers: authHeaders(),
+    body: JSON.stringify({ name: newName, title: newTitle, emoji: newEmoji }),
+  }).then(r => r.json()).then(d => {
+    if (d.success) { toast('ok','Barbero actualizado', newName); loadBarberosView(); }
+    else toast('err','Error', d.error);
+  });
+}
+
+async function toggleBarber(barberId, active) {
+  const res = await fetch(`${API_URL}/api/admin/barbers/${barberId}`, {
+    method: 'PUT', headers: authHeaders(), body: JSON.stringify({ active }),
+  });
+  if (res.ok) { toast('ok', active ? 'Barbero activado' : 'Barbero desactivado', ''); loadBarberosView(); }
+}
+
+async function deleteBarber(barberId, name) {
+  if (!confirm(`¿Eliminar a "${name}"? Solo es posible si no tiene citas confirmadas.`)) return;
+  const res = await fetch(`${API_URL}/api/admin/barbers/${barberId}`, { method: 'DELETE', headers: authHeaders() });
+  const d = await res.json();
+  if (res.ok) { toast('ok','Barbero eliminado', name); loadBarberosView(); }
+  else toast('err','Error', d.error);
+}
 
 /* ══════════════════════════════════════════════
    TOAST
